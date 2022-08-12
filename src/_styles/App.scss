@@ -28,6 +28,7 @@ canvas {
   position: fixed;
   background-color: var(--main-background);
   color: var(--main-typography);
+  text-align: center;
 
   @include transitionColors();
 }
