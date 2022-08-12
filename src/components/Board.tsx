@@ -1,18 +1,14 @@
 import React from 'react';
 import { boardSquares } from '../constants/board';
 import { BoardSquare } from '../types/board';
+import BoardSquareComponent from './BoardSquare';
 
 function Board() {
   return (
     <div className="board-container">
       <div className="board">
-        {boardSquares.map(({ i, player, pathOrder }: BoardSquare) => (
-          <div key={`${i}-${player}`} className="board-square">
-            <div>{`Index ${i}`}</div>
-            {/* <div>{`Player ${player}`}</div>
-            <div>{`Column ${column}`}</div> */}
-            <h3>{pathOrder}</h3>
-          </div>
+        {boardSquares.map((square: BoardSquare) => (
+          <BoardSquareComponent key={`${square.i}-${square.player}`} square={square} />
         ))}
       </div>
     </div>
