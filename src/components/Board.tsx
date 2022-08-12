@@ -21,7 +21,7 @@ function Board() {
         Active Player: {activePlayer} Hand: {hand} activeSquare0: {activeSquare0}
       </div>
       <div className="board-container">
-        <div className="board">
+        <div className={`board ${activePlayer === 1 ? 'active' : ''}`}>
           {board1.map((square: BoardSquare) => (
             <BoardSquareComponent
               key={`${square.i}-${square.player}`}
@@ -29,12 +29,12 @@ function Board() {
               isActive={activeSquare1 === square.pathOrder && activePlayer === square.player}
               handleMove={handleMove}
               hand={hand}
-              disabled={activePlayer !== 1}
+              disabled={activePlayer !== 1 || square.value < 2}
             />
           ))}
         </div>
         <div style={{ height: '1rem' }} />
-        <div className="board">
+        <div className={`board ${activePlayer === 0 ? 'active' : ''}`}>
           {board0.map((square: BoardSquare) => (
             <BoardSquareComponent
               key={`${square.i}-${square.player}`}
@@ -42,7 +42,7 @@ function Board() {
               isActive={activeSquare0 === square.pathOrder && activePlayer === square.player}
               handleMove={handleMove}
               hand={hand}
-              disabled={activePlayer !== 0}
+              disabled={activePlayer !== 0 || square.value < 2}
             />
           ))}
         </div>

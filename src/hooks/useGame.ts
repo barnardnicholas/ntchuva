@@ -1,5 +1,5 @@
 import { useCallback, useState } from 'react';
-import { BoardSquare, PathSquare, PlayerIndex } from '../types/board';
+import { BoardColumn, BoardSquare, PathSquare, PlayerIndex } from '../types/board';
 import { buildBoardSquares } from '../utils/utils';
 import usePrevious from './usePrevious';
 
@@ -27,6 +27,11 @@ const useGame = (): UseGame => {
 
   const prevProps = usePrevious({ ticker });
 
+  function isSquareInFrontRow(pathSquare: PathSquare, player: PlayerIndex) {
+    if (player === 0) return pathSquare < 8;
+    return pathSquare > 7;
+  }
+
   function getNextPathSquare(pathSquare: PathSquare): PathSquare {
     if (pathSquare === 15) return 0;
     return (pathSquare + 1) as PathSquare;
@@ -40,15 +45,22 @@ const useGame = (): UseGame => {
     return -1;
   }
 
+  function killColumn(column: BoardColumn, player: PlayerIndex): void {
+    const board = [...[board0, board1][player]].map((square: BoardSquare) => {
+      if (square.column === column) return { ...square, value: 0 };
+      return square;
+    });
+    const setBoard = [setBoard0, setBoard1][player];
+    setBoard(board);
+  }
+
   const tick = useCallback(() => {
     if (buttonDisabled) return;
-    console.log('.');
     const board = [...[board0, board1][activePlayer]];
     const setBoard = [setBoard0, setBoard1][activePlayer];
     const activeSquare: PathSquare = [activeSquare0, activeSquare1][activePlayer] as PathSquare;
     const setActiveSquare = [setActiveSquare0, setActiveSquare1][activePlayer];
 
-    console.log(activeSquare);
     if (activeSquare < 0) return;
 
     if (hand > 0) {
@@ -70,6 +82,10 @@ const useGame = (): UseGame => {
       /* eslint-enable */
     } else {
       // handle capturing of opponents pieces
+      if (isSquareInFrontRow(activeSquare, activePlayer)) {
+        const newSquare = board[getIndexOfPathSquare(activeSquare)];
+        killColumn(newSquare.column, activePlayer === 0 ? 1 : 0);
+      }
       setActiveSquare(-1);
       setActivePlayer((prevActivePlayer: PlayerIndex) => (!prevActivePlayer ? 1 : 0));
     }

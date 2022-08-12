@@ -12,6 +12,14 @@ $square-width: calc((100vw - 4rem) / 8);
     grid-template-columns: repeat(8, 1fr);
     width: fit-content;
 
+    &.active {
+      border: 1px solid var(--main-typography);
+
+      .board-square {
+        border-color: var(--main-typography);
+      }
+    }
+
     .board-square {
       width: $square-width;
       height: $square-width;
@@ -19,6 +27,10 @@ $square-width: calc((100vw - 4rem) / 8);
       cursor: pointer;
       position: relative;
       z-index: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-wrap: wrap;
 
       &.active {
         background-color: #444444;
@@ -32,12 +44,24 @@ $square-width: calc((100vw - 4rem) / 8);
         h3 {
           color: var(--main-border);
         }
+
+        .counter {
+          background-color: var(--main-border);
+        }
+      }
+
+      .counter {
+        width: 1.5rem;
+        height: 1.5rem;
+        background-color: var(--main-typography);
+        border-radius: 50%;
+        margin: 0.1rem;
       }
 
       .hand-widget {
         position: absolute;
-        top: calc(100% - 2rem);
-        left: calc(100% - 2rem);
+        bottom: calc(1rem / 2);
+        right: calc(1rem / 2);
         width: 4rem;
         height: 4rem;
         background-color: var(--main-typography);
