@@ -28,9 +28,15 @@ canvas {
   position: fixed;
   background-color: var(--main-background);
   color: var(--main-typography);
-  text-align: center;
+  display: flex;
+  justify-content: center;
 
   @include transitionColors();
+}
+
+.app-content {
+  max-width: 100vmin;
+  text-align: center;
 }
 
 h1 {

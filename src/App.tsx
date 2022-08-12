@@ -5,8 +5,10 @@ import './_styles/App.scss';
 function App() {
   return (
     <div className="App">
-      <h1>Ntchuva</h1>
-      <Board />
+      <div className="app-content">
+        <h1>Ntchuva</h1>
+        <Board />
+      </div>
     </div>
   );
 }
