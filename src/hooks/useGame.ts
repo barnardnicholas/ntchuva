@@ -1,7 +1,6 @@
 import { useCallback, useState } from 'react';
 import { BoardColumn, BoardSquare, PathSquare, PlayerIndex } from '../types/board';
 import { buildBoardSquares } from '../utils/utils';
-import usePrevious from './usePrevious';
 
 interface UseGame {
   board0: BoardSquare[];
@@ -21,11 +20,8 @@ const useGame = (): UseGame => {
   const [activeSquare0, setActiveSquare0] = useState<PathSquare | -1>(-1); // Player 1
   const [activeSquare1, setActiveSquare1] = useState<PathSquare | -1>(-1); // Player 2
   const [buttonDisabled, setButtonDisabled] = useState<boolean>(false);
-  const [ticker, setTicker] = useState<number>(0);
   const [hand, setHand] = useState<number>(0); // Number of counters in hand
   const [activePlayer, setActivePlayer] = useState<PlayerIndex>(0);
-
-  const prevProps = usePrevious({ ticker });
 
   function isSquareInFrontRow(pathSquare: PathSquare, player: PlayerIndex) {
     if (player === 0) return pathSquare < 8;
@@ -75,7 +71,6 @@ const useGame = (): UseGame => {
       setHand((prevHand: number) => prevHand - 1); // Decrease hand by 1
       if (activeSquare !== newActiveSquare) setActiveSquare(newActiveSquare); // Update active square if necessary
       setBoard(board); // Update board
-      setTicker(t => t + 1);
     } else if (hand <= 0 && board[getIndexOfPathSquare(activeSquare)].value > 1) {
       /* eslint-disable */
       handleMove(activeSquare);
@@ -117,7 +112,6 @@ const useGame = (): UseGame => {
     setBoard(board);
     setButtonDisabled(true);
     setTimeout(() => setButtonDisabled(false), 500);
-    setTicker(t => t + 1);
   }
   /* eslint-enable */
 
