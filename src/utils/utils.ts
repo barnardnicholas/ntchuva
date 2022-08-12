@@ -1,5 +1,5 @@
 import { boardIndexes } from '../constants/board';
-import { BoardColumn, BoardSquare, PathSquare } from '../types/board';
+import { BoardColumn, BoardSquare, PathSquare, PlayerIndex } from '../types/board';
 
 /**
  * Calculate a board square's column given its index
@@ -42,4 +42,21 @@ export const buildBoardSquares = (player: 0 | 1): BoardSquare[] => {
 
 export function dummyKeyDown() {
   console.log('keydown');
+}
+
+export function isSquareInFrontRow(pathSquare: PathSquare, player: PlayerIndex) {
+  if (player === 0) return pathSquare < 8;
+  return pathSquare > 7;
+}
+
+export function getNextPathSquare(pathSquare: PathSquare): PathSquare {
+  if (pathSquare === 15) return 0;
+  return (pathSquare + 1) as PathSquare;
+}
+
+export function getIndexOfPathSquare(pathSquare: PathSquare, board: BoardSquare[]): number {
+  // given a pathSquare, get the index
+  const result = board.find((square: BoardSquare) => square.pathOrder === pathSquare);
+  if (result && !Number.isNaN(result.i)) return result.i;
+  return -1;
 }

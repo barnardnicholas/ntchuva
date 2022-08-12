@@ -1,4 +1,4 @@
-$square-width: calc((100vw - 4rem) / 8);
+$square-width: calc((100vw - 2rem) / 8);
 
 .board-container {
   display: flex;
@@ -51,8 +51,8 @@ $square-width: calc((100vw - 4rem) / 8);
       }
 
       .counter {
-        width: 1.5rem;
-        height: 1.5rem;
+        width: 20%;
+        height: 20%;
         background-color: var(--main-typography);
         border-radius: 50%;
         margin: 0.1rem;
@@ -60,10 +60,10 @@ $square-width: calc((100vw - 4rem) / 8);
 
       .hand-widget {
         position: absolute;
-        bottom: calc(1rem / 2);
-        right: calc(1rem / 2);
-        width: 4rem;
-        height: 4rem;
+        bottom: 5%;
+        right: 5%;
+        width: 33%;
+        height: 33%;
         background-color: var(--main-typography);
         border-radius: 50%;
         z-index: 20;
@@ -73,8 +73,16 @@ $square-width: calc((100vw - 4rem) / 8);
 
         h4 {
           color: var(--main-background);
+          font-size: 66%;
         }
       }
     }
   }
+}
+
+.button-container {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  min-height: 50px;
 }

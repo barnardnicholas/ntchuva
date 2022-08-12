@@ -1,6 +1,11 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { BoardColumn, BoardSquare, PathSquare, PlayerIndex } from '../types/board';
-import { buildBoardSquares } from '../utils/utils';
+import {
+  buildBoardSquares,
+  getIndexOfPathSquare,
+  getNextPathSquare,
+  isSquareInFrontRow,
+} from '../utils/utils';
 
 interface UseGame {
   board0: BoardSquare[];
@@ -12,6 +17,11 @@ interface UseGame {
   hand: number;
   handleMove: (pathSquare: PathSquare) => void;
   buttonDisabled: boolean;
+  board0EndGame: boolean;
+  board1EndGame: boolean;
+  score0: number;
+  score1: number;
+  moveInProgress: boolean;
 }
 
 const useGame = (): UseGame => {
@@ -22,33 +32,58 @@ const useGame = (): UseGame => {
   const [buttonDisabled, setButtonDisabled] = useState<boolean>(false);
   const [hand, setHand] = useState<number>(0); // Number of counters in hand
   const [activePlayer, setActivePlayer] = useState<PlayerIndex>(0);
+  const [moveInProgress, setMoveInProgress] = useState<boolean>(false);
 
-  function isSquareInFrontRow(pathSquare: PathSquare, player: PlayerIndex) {
-    if (player === 0) return pathSquare < 8;
-    return pathSquare > 7;
-  }
+  const board0EndGame = useMemo(
+    () => board0.every((square: BoardSquare) => square.value < 2),
+    [board0],
+  );
+  const board1EndGame = useMemo(
+    () => board1.every((square: BoardSquare) => square.value < 2),
+    [board1],
+  );
 
-  function getNextPathSquare(pathSquare: PathSquare): PathSquare {
-    if (pathSquare === 15) return 0;
-    return (pathSquare + 1) as PathSquare;
-  }
+  const score0: number = useMemo(
+    () => board0.reduce((acc: number, curr: BoardSquare) => acc + curr.value, 0),
+    [board0],
+  );
+  const score1: number = useMemo(
+    () => board1.reduce((acc: number, curr: BoardSquare) => acc + curr.value, 0),
+    [board1],
+  );
 
-  function getIndexOfPathSquare(pathSquare: PathSquare): number {
-    // given a pathSquare and player, get the index
-    const activeBoard = [...[board0, board1][activePlayer]];
-    const result = activeBoard.find((square: BoardSquare) => square.pathOrder === pathSquare);
-    if (result && !Number.isNaN(result.i)) return result.i;
-    return -1;
-  }
+  const killColumn = useCallback(
+    (column: BoardColumn, player: PlayerIndex): void => {
+      const board = [...[board0, board1][player]].map((square: BoardSquare) => {
+        if (square.column === column) return { ...square, value: 0 };
+        return square;
+      });
+      const setBoard = [setBoard0, setBoard1][player];
+      setBoard(board);
+    },
+    [board0, board1],
+  );
 
-  function killColumn(column: BoardColumn, player: PlayerIndex): void {
-    const board = [...[board0, board1][player]].map((square: BoardSquare) => {
-      if (square.column === column) return { ...square, value: 0 };
-      return square;
-    });
-    const setBoard = [setBoard0, setBoard1][player];
-    setBoard(board);
-  }
+  const handleMove = useCallback(
+    (pathSquare: PathSquare): void => {
+      setMoveInProgress(true);
+      const board = [...[board0, board1][activePlayer]];
+      const setBoard = [setBoard0, setBoard1][activePlayer];
+      const setActiveSquare = [setActiveSquare0, setActiveSquare1][activePlayer];
+      const newSquare = board[getIndexOfPathSquare(pathSquare, board)];
+      // set hand to chosen square value
+      const newHand = newSquare.value;
+      // set chosen square value to 0
+      board[newSquare.i] = { ...newSquare, value: 0 }; // Increase value of active square by 1
+      // set active square to chosen square
+      setHand(newHand);
+      setActiveSquare(pathSquare);
+      setBoard(board);
+      setButtonDisabled(true);
+      setTimeout(() => setButtonDisabled(false), 200);
+    },
+    [activePlayer, board0, board1],
+  );
 
   const tick = useCallback(() => {
     if (buttonDisabled) return;
@@ -61,28 +96,29 @@ const useGame = (): UseGame => {
 
     if (hand > 0) {
       const newActiveSquare =
-        board[getIndexOfPathSquare(activeSquare)].value > 1
+        board[getIndexOfPathSquare(activeSquare, board)].value > 1
           ? getNextPathSquare(activeSquare)
           : getNextPathSquare(activeSquare); // Only advance active square if value > 1
 
-      const newSquare = board[getIndexOfPathSquare(newActiveSquare)];
+      const newSquare = board[getIndexOfPathSquare(newActiveSquare, board)];
       board[newSquare.i] = { ...newSquare, value: newSquare.value + 1 }; // Increase value of active square by 1
 
       setHand((prevHand: number) => prevHand - 1); // Decrease hand by 1
       if (activeSquare !== newActiveSquare) setActiveSquare(newActiveSquare); // Update active square if necessary
       setBoard(board); // Update board
-    } else if (hand <= 0 && board[getIndexOfPathSquare(activeSquare)].value > 1) {
+    } else if (hand <= 0 && board[getIndexOfPathSquare(activeSquare, board)].value > 1) {
       /* eslint-disable */
       handleMove(activeSquare);
       /* eslint-enable */
     } else {
       // handle capturing of opponents pieces
       if (isSquareInFrontRow(activeSquare, activePlayer)) {
-        const newSquare = board[getIndexOfPathSquare(activeSquare)];
+        const newSquare = board[getIndexOfPathSquare(activeSquare, board)];
         killColumn(newSquare.column, activePlayer === 0 ? 1 : 0);
       }
       setActiveSquare(-1);
       setActivePlayer((prevActivePlayer: PlayerIndex) => (!prevActivePlayer ? 1 : 0));
+      setMoveInProgress(false);
     }
   }, [
     board0,
@@ -91,29 +127,10 @@ const useGame = (): UseGame => {
     activeSquare1,
     activePlayer,
     buttonDisabled,
-    getIndexOfPathSquare,
     hand,
     handleMove,
+    killColumn,
   ]);
-
-  /* eslint-disable */
-  function handleMove(pathSquare: PathSquare) {
-    const board = [...[board0, board1][activePlayer]];
-    const setBoard = [setBoard0, setBoard1][activePlayer];
-    const setActiveSquare = [setActiveSquare0, setActiveSquare1][activePlayer];
-    const newSquare = board[getIndexOfPathSquare(pathSquare)];
-    // set hand to chosen square value
-    const newHand = newSquare.value;
-    // set chosen square value to 0
-    board[newSquare.i] = { ...newSquare, value: 0 }; // Increase value of active square by 1
-    // set active square to chosen square
-    setHand(newHand);
-    setActiveSquare(pathSquare);
-    setBoard(board);
-    setButtonDisabled(true);
-    setTimeout(() => setButtonDisabled(false), 500);
-  }
-  /* eslint-enable */
 
   return {
     board0,
@@ -125,6 +142,11 @@ const useGame = (): UseGame => {
     tick,
     handleMove,
     buttonDisabled,
+    board0EndGame,
+    board1EndGame,
+    score0,
+    score1,
+    moveInProgress,
   };
 };
 

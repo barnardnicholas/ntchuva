@@ -9,15 +9,29 @@ interface BoardSquareProps {
   handleMove: (pathSquare: PathSquare) => void;
   hand: number;
   disabled: boolean;
+  moveInProgress: boolean;
 }
-function BoardSquareComponent({ square, isActive, handleMove, hand, disabled }: BoardSquareProps) {
+function BoardSquareComponent({
+  square,
+  isActive,
+  handleMove,
+  hand,
+  disabled,
+  moveInProgress,
+}: BoardSquareProps) {
   const { i, player, pathOrder, value } = square;
   const counters: number[] = new Array(value).fill(0).map((_: number, j: number) => j);
+
+  function handleClick() {
+    if (moveInProgress) return;
+    handleMove(pathOrder);
+  }
+
   return (
     <div
       key={`${i}-${player}`}
       className={`board-square ${isActive ? 'active' : ''} ${disabled ? 'disabled' : ''}`}
-      onClick={() => handleMove(pathOrder)}
+      onClick={handleClick}
       onKeyDown={dummyKeyDown}
       role="button"
       tabIndex={0}
