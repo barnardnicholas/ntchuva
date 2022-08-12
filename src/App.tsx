@@ -1,11 +1,12 @@
-import React from "react";
-import logo from "./logo.svg";
-import "./_styles/App.scss";
+import React from 'react';
+import Board from './components/Board';
+import './_styles/App.scss';
 
 function App() {
   return (
     <div className="App">
       <h1>Ntchuva</h1>
+      <Board />
     </div>
   );
 }
