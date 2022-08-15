@@ -1,5 +1,7 @@
+import { resourceLimits } from 'worker_threads';
 import { boardIndexes } from '../constants/board';
-import { getColumnFromIndex, getPathOrderFromIndex } from './utils';
+import { BoardSquare, PlayerIndex } from '../types/board';
+import { buildBoardSquares, getColumnFromIndex, getPathOrderFromIndex } from './utils';
 
 // ------------------------------------------------------------------------
 
@@ -72,6 +74,88 @@ describe('getPathOrderFromIndex', () => {
       expect(getPathOrderFromIndex(13)).toEqual(10);
       expect(getPathOrderFromIndex(14)).toEqual(9);
       expect(getPathOrderFromIndex(15)).toEqual(8);
+    });
+  });
+});
+
+// ------------------------------------------------------------------------
+
+describe('buildBoardSquares', () => {
+  const player: PlayerIndex = 0;
+  const result = buildBoardSquares(player);
+  const dummyBoardSquare = {
+    i: 0,
+    pathOrder: 0,
+    player: 0,
+    value: 2,
+    column: 0,
+  };
+
+  test('Returns an array of valid objects', () => {
+    expect(Array.isArray(result)).toEqual(true);
+
+    Object.values(result).forEach((item: BoardSquare) => {
+      expect(item).toHaveProperty('i');
+      expect(item).toHaveProperty('pathOrder');
+      expect(item).toHaveProperty('player');
+      expect(item).toHaveProperty('value');
+      expect(item).toHaveProperty('column');
+    });
+  });
+
+  test('Returns the indexes correctly', () => {
+    result.forEach((item: BoardSquare, index: number) => {
+      expect(item.i).toEqual(index);
+    });
+  });
+
+  test('Returns correct path orders', () => {
+    [0, 1, 2, 3, 4, 5, 6, 7].forEach((i: number) => {
+      expect(result[i].pathOrder).toEqual(i);
+    });
+    expect(result[8].pathOrder).toEqual(15);
+    expect(result[9].pathOrder).toEqual(14);
+    expect(result[10].pathOrder).toEqual(13);
+    expect(result[11].pathOrder).toEqual(12);
+    expect(result[12].pathOrder).toEqual(11);
+    expect(result[13].pathOrder).toEqual(10);
+    expect(result[14].pathOrder).toEqual(9);
+    expect(result[15].pathOrder).toEqual(8);
+  });
+
+  test('Returns the correct columns', () => {
+    expect(result[0].column).toEqual(0);
+    expect(result[1].column).toEqual(1);
+    expect(result[2].column).toEqual(2);
+    expect(result[3].column).toEqual(3);
+    expect(result[4].column).toEqual(4);
+    expect(result[5].column).toEqual(5);
+    expect(result[6].column).toEqual(6);
+    expect(result[7].column).toEqual(7);
+    expect(result[8].column).toEqual(0);
+    expect(result[9].column).toEqual(1);
+    expect(result[10].column).toEqual(2);
+    expect(result[11].column).toEqual(3);
+    expect(result[12].column).toEqual(4);
+    expect(result[13].column).toEqual(5);
+    expect(result[14].column).toEqual(6);
+    expect(result[15].column).toEqual(7);
+  });
+
+  test('Returns correct player values', () => {
+    result.forEach((item: BoardSquare) => {
+      expect(item.player).toEqual(player);
+    });
+
+    const player1Results = buildBoardSquares(1);
+    player1Results.forEach((item: BoardSquare) => {
+      expect(item.player).toEqual(1);
+    });
+  });
+
+  test('Returns the correct values', () => {
+    result.forEach((item: BoardSquare) => {
+      expect(item.value).toEqual(2);
     });
   });
 });
