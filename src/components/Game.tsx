@@ -17,7 +17,6 @@ interface GameState {
   board1: BoardSquare[]; // Player 1's squares
   activeSquare0: PathSquare | -1; // Player 1
   activeSquare1: PathSquare | -1; // Player 2
-  buttonDisabled: boolean; // Is tick button disabled?
   hand: number; // Number of counters in hand
   activePlayer: PlayerIndex; // Player whose move it is
   moveInProgress: boolean; // Is a move happening right now?
@@ -40,7 +39,6 @@ class Game extends Component {
       board1: buildBoardSquares(1),
       activeSquare0: -1,
       activeSquare1: -1,
-      buttonDisabled: false,
       hand: 0,
       activePlayer: 0,
       moveInProgress: false,
@@ -105,10 +103,6 @@ class Game extends Component {
     };
     this.setState(newState);
     masterTimer = setInterval(this.tick, 333);
-
-    setTimeout(() => {
-      this.setState({ buttonDisabled: false });
-    }, 200); // Re-enable button after delay
   };
 
   killColumn = (column: BoardColumn, player: PlayerIndex): void => {
@@ -121,9 +115,7 @@ class Game extends Component {
   };
 
   tick = () => {
-    const { hand, buttonDisabled, board0, board1, activePlayer, activeSquare0, activeSquare1 } =
-      this.state;
-    if (buttonDisabled) return;
+    const { hand, board0, board1, activePlayer, activeSquare0, activeSquare1 } = this.state;
     const board = [...[board0, board1][activePlayer]];
     const activeSquare: PathSquare = [activeSquare0, activeSquare1][activePlayer] as PathSquare;
 
