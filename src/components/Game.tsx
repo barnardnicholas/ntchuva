@@ -55,17 +55,17 @@ class Game extends Component {
     const newState = {
       score0: board0.reduce((acc: number, curr: BoardSquare) => acc + curr.value, 0),
       score1: board1.reduce((acc: number, curr: BoardSquare) => acc + curr.value, 0),
-    };
-    this.setState(newState);
+    }; // Initialise scores
+    this.setState(newState); // Update state
   }
 
   componentDidUpdate(_: unknown, prevState: GameState) {
     const { moveInProgress, board0, board1 } = this.state;
     if (prevState.moveInProgress && !moveInProgress) {
       console.log('END OF TURN');
-      clearInterval(masterTimer);
+      clearInterval(masterTimer); // Clear out timer at the end of each turn
 
-      let newState = {};
+      let newState = {}; // Establish new state & update scores & flags as necessary
       const isBoard0EndGame = board0.every((square: BoardSquare) => square.value < 2);
       const isBoard1EndGame = board1.every((square: BoardSquare) => square.value < 2);
       const score0 = board0.reduce((acc: number, curr: BoardSquare) => acc + curr.value, 0);
@@ -76,7 +76,8 @@ class Game extends Component {
         newState = { ...newState, isBoard1EndGame };
       if (prevState.score0 !== score0) newState = { ...newState, score0 };
       if (prevState.score1 !== score1) newState = { ...newState, score1 };
-      if (Object.keys(newState).length) this.setState(newState);
+
+      if (Object.keys(newState).length) this.setState(newState); // Only update state if there are any differences
     }
   }
 
