@@ -1,5 +1,5 @@
 import React from 'react';
-import Board from './components/Board';
+import Game from './components/Game';
 import './_styles/App.scss';
 
 function App() {
@@ -7,7 +7,7 @@ function App() {
     <div className="App">
       <div className="app-content">
         <h1>Ntchuva</h1>
-        <Board />
+        <Game />
       </div>
     </div>
   );
