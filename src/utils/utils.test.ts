@@ -49,7 +49,7 @@ describe('getColumnFromIndex', () => {
 
 // ------------------------------------------------------------------------
 
-describe('getColumnFromIndex', () => {
+describe('getPathOrderFromIndex', () => {
   test('Returns a number between 0 and 15', () => {
     boardIndexes.forEach((i: number) => {
       expect(Number.isNaN(getPathOrderFromIndex(i))).toEqual(false);
