@@ -60,7 +60,7 @@ export function isSquareInFrontRow(pathSquare: PathSquare, player: PlayerIndex) 
 }
 
 /**
- * Get the next pathSQuare in the sequence. wraps back to 0 if on last square
+ * Get the next pathSquare in the sequence. wraps back to 0 if on last square
  * @param pathSquare - must be between 0 and 15
  * @return next pathsquare -  - must be between 0 and 15
  */
