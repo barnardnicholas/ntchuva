@@ -106,6 +106,7 @@ class Game extends Component {
   };
 
   killColumn = (column: BoardColumn, player: PlayerIndex): void => {
+    // Capture pieces based on players final square
     const { board0, board1 } = this.state;
     const board = [...[board0, board1][player]].map((square: BoardSquare) => {
       if (square.column === column) return { ...square, value: 0 };
@@ -116,32 +117,35 @@ class Game extends Component {
 
   tick = () => {
     const { hand, board0, board1, activePlayer, activeSquare0, activeSquare1 } = this.state;
-    const board = [...[board0, board1][activePlayer]];
-    const activeSquare: PathSquare = [activeSquare0, activeSquare1][activePlayer] as PathSquare;
 
-    if (activeSquare < 0) return;
+    const board = [...[board0, board1][activePlayer]]; // Select correct board based on activePlayer and make a copy for private use
+    const activeSquare: PathSquare = [activeSquare0, activeSquare1][activePlayer] as PathSquare; // Select correct activeSquare based on activePlayer
+
+    if (activeSquare < 0) return; // Precaution in case activesquare is -1
 
     if (hand > 0) {
-      const newActiveSquare =
-        board[getIndexOfPathSquare(activeSquare, board)].value > 1
-          ? getNextPathSquare(activeSquare)
-          : getNextPathSquare(activeSquare); // Only advance active square if value > 1
+      // There are counters in hand, so move
 
-      const newSquare = board[getIndexOfPathSquare(newActiveSquare, board)];
+      const newActiveSquare = getNextPathSquare(activeSquare); // Get next square number in sequence
+
+      const newSquare = board[getIndexOfPathSquare(newActiveSquare, board)]; // Get next square in sequence
       board[newSquare.i] = { ...newSquare, value: newSquare.value + 1 }; // Increase value of active square by 1
 
       const newState: Record<string, number | boolean | BoardSquare[]> = {
         hand: hand - 1,
-      };
+      }; // Establish new state
+
       if (activeSquare !== newActiveSquare) {
         newState[`activeSquare${activePlayer}`] = newActiveSquare;
         newState[`board${activePlayer}`] = board;
-      }
-      this.setState(newState);
+      } // Mutate state if necessary
+
+      this.setState(newState); // Update state
     } else if (hand <= 0 && board[getIndexOfPathSquare(activeSquare, board)].value > 1) {
+      // There are no more counters in hand, but the final square has more than one, so move again
       this.handleMove(activeSquare);
     } else {
-      // handle capturing of opponents pieces
+      // This turn is over, so handle capturing of opponent's pieces
       if (isSquareInFrontRow(activeSquare, activePlayer)) {
         const newSquare = board[getIndexOfPathSquare(activeSquare, board)];
         this.killColumn(newSquare.column, activePlayer === 0 ? 1 : 0);
@@ -152,7 +156,7 @@ class Game extends Component {
         activeSquare1: -1,
         activePlayer: !activePlayer ? 1 : 0,
         moveInProgress: false,
-      });
+      }); // Update state and end turn
     }
   };
 
