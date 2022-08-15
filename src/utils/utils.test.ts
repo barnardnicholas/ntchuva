@@ -1,7 +1,13 @@
-import { resourceLimits } from 'worker_threads';
 import { boardIndexes } from '../constants/board';
-import { BoardSquare, PlayerIndex } from '../types/board';
-import { buildBoardSquares, getColumnFromIndex, getPathOrderFromIndex } from './utils';
+import { BoardSquare, PathSquare, PlayerIndex } from '../types/board';
+import {
+  buildBoardSquares,
+  getColumnFromIndex,
+  getIndexOfPathSquare,
+  getNextPathSquare,
+  getPathOrderFromIndex,
+  isSquareInFrontRow,
+} from './utils';
 
 // ------------------------------------------------------------------------
 
@@ -83,13 +89,6 @@ describe('getPathOrderFromIndex', () => {
 describe('buildBoardSquares', () => {
   const player: PlayerIndex = 0;
   const result = buildBoardSquares(player);
-  const dummyBoardSquare = {
-    i: 0,
-    pathOrder: 0,
-    player: 0,
-    value: 2,
-    column: 0,
-  };
 
   test('Returns an array of valid objects', () => {
     expect(Array.isArray(result)).toEqual(true);
@@ -156,6 +155,59 @@ describe('buildBoardSquares', () => {
   test('Returns the correct values', () => {
     result.forEach((item: BoardSquare) => {
       expect(item.value).toEqual(2);
+    });
+  });
+});
+
+// ------------------------------------------------------------------------
+
+describe('isSquareInFrontRow', () => {
+  const pathIndexes: PathSquare[] = [0, 1, 2, 3, 4, 5, 6, 7, 15, 14, 13, 12, 11, 10, 9, 8]; // Correct path order
+  const player0: PlayerIndex = 0;
+  const player1: PlayerIndex = 1;
+
+  test('Returns a boolean', () => {
+    expect([true, false]).toContain(isSquareInFrontRow(0, 0));
+  });
+
+  test('Returns correct answers from various values', () => {
+    expect(isSquareInFrontRow(0, 0)).toEqual(true);
+    expect(isSquareInFrontRow(7, 0)).toEqual(true);
+    expect(isSquareInFrontRow(15, 0)).toEqual(false);
+    expect(isSquareInFrontRow(8, 0)).toEqual(false);
+    expect(isSquareInFrontRow(0, 1)).toEqual(false);
+    expect(isSquareInFrontRow(7, 1)).toEqual(false);
+    expect(isSquareInFrontRow(15, 1)).toEqual(true);
+    expect(isSquareInFrontRow(8, 1)).toEqual(true);
+  });
+});
+
+// ------------------------------------------------------------------------
+
+describe('getNextPathSquare', () => {
+  test('Returns correct path square from values 0-14', () => {
+    [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14].forEach((square: number) => {
+      expect(getNextPathSquare(square as PathSquare)).toEqual(square + 1);
+    });
+  });
+  test('Returns correct path square from values 0-14', () => {
+    expect(getNextPathSquare(15 as PathSquare)).toEqual(0);
+  });
+});
+
+// ------------------------------------------------------------------------
+
+describe('getIndexOfPathSquare', () => {
+  test('Returns correct path square from values 0-14', () => {
+    const pathSquares = [0, 1, 2, 3, 4, 5, 6, 7, 15, 14, 13, 12, 11, 10, 9, 8];
+    const board = new Array(16)
+      .fill(0)
+      .map((_: number, index: number) => ({ i: index, pathOrder: pathSquares[index] }));
+
+    board.forEach((boardSquare: Record<string, number>) => {
+      expect(
+        getIndexOfPathSquare(boardSquare.pathOrder as PathSquare, board as BoardSquare[]),
+      ).toEqual(boardSquare.i);
     });
   });
 });
