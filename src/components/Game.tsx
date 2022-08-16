@@ -209,8 +209,6 @@ class Game<P> extends Component<P> {
             ))}
             <HandWidget
               visible={moveInProgress && activePlayer === 1}
-              player={0}
-              activePlayer={activePlayer}
               activeSquare={[activeSquare0, activeSquare1][activePlayer]}
               hand={hand}
               moveInProgress={moveInProgress}
@@ -230,8 +228,6 @@ class Game<P> extends Component<P> {
             ))}
             <HandWidget
               visible={moveInProgress && activePlayer === 0}
-              player={0}
-              activePlayer={activePlayer}
               activeSquare={[activeSquare0, activeSquare1][activePlayer]}
               hand={hand}
               moveInProgress={moveInProgress}

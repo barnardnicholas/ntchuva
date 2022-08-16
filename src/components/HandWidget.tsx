@@ -1,17 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import usePrevious from '../hooks/usePrevious';
-import { PathSquare, PlayerIndex } from '../types/board';
+import { PathSquare } from '../types/board';
 import { getColumnFromPathSquare } from '../utils/utils';
-
-interface HandWidgetState {
-  top: number;
-  left: number;
-}
 
 interface HandWidgetProps {
   visible: boolean;
-  player: PlayerIndex;
-  activePlayer: PlayerIndex;
   activeSquare: PathSquare | -1;
   hand: number;
   moveInProgress: boolean;
