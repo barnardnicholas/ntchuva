@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import BoardSquareComponent from './BoardSquare';
 import { BoardColumn, BoardSquare, PathSquare, PlayerIndex } from '../types/board';
 import {
   buildBoardSquares,
@@ -7,11 +6,12 @@ import {
   getNextPathSquare,
   isSquareInFrontRow,
 } from '../utils/utils';
+import BoardSquareComponent from './BoardSquare';
+import GameOverModal from './modals/GameOverModal';
 
 /* eslint-disable */
 let masterTimer: ReturnType<typeof setInterval> = setInterval(() => {}, 1);
 /* eslint-enable */
-
 interface GameState {
   board0: BoardSquare[]; // Player 0's squares
   board1: BoardSquare[]; // Player 1's squares
@@ -24,7 +24,23 @@ interface GameState {
   isBoard1EndGame: boolean;
   score0: number;
   score1: number;
+  showGameOverModal: boolean;
 }
+
+const initialState: GameState = {
+  board0: buildBoardSquares(0),
+  board1: buildBoardSquares(1),
+  activeSquare0: -1,
+  activeSquare1: -1,
+  hand: 0,
+  activePlayer: 0,
+  moveInProgress: false,
+  isBoard0EndGame: false,
+  isBoard1EndGame: false,
+  score0: 0,
+  score1: 0,
+  showGameOverModal: false,
+};
 
 class Game<P> extends Component<P> {
   /* eslint-disable */
@@ -34,19 +50,7 @@ class Game<P> extends Component<P> {
   constructor(props: Readonly<P>) {
     super(props);
 
-    this.state = {
-      board0: buildBoardSquares(0),
-      board1: buildBoardSquares(1),
-      activeSquare0: -1,
-      activeSquare1: -1,
-      hand: 0,
-      activePlayer: 0,
-      moveInProgress: false,
-      isBoard0EndGame: false,
-      isBoard1EndGame: false,
-      score0: 0,
-      score1: 0,
-    };
+    this.state = { ...initialState };
   }
 
   componentDidMount() {
@@ -76,6 +80,8 @@ class Game<P> extends Component<P> {
         newState = { ...newState, isBoard1EndGame };
       if (prevState.score0 !== score0) newState = { ...newState, score0 };
       if (prevState.score1 !== score1) newState = { ...newState, score1 };
+      if ((prevState.score0 > 0 && score0 <= 0) || (prevState.score1 > 0 && score1 <= 0))
+        newState = { ...newState, showGameOverModal: true };
 
       if (Object.keys(newState).length) this.setState(newState); // Only update state if there are any differences
     }
@@ -84,6 +90,11 @@ class Game<P> extends Component<P> {
   componentWillUnmount() {
     clearInterval(masterTimer); // Clear out timer on unmount
   }
+
+  resetGameState = () => {
+    clearInterval(masterTimer);
+    this.setState(initialState);
+  };
 
   handleMove = (pathSquare: PathSquare): void => {
     const { board0, board1, activePlayer } = this.state;
@@ -161,6 +172,10 @@ class Game<P> extends Component<P> {
     }
   };
 
+  handleCloseGameOverModal = () => {
+    this.setState({ showGameOverModal: false });
+  };
+
   render() {
     const {
       hand,
@@ -174,6 +189,7 @@ class Game<P> extends Component<P> {
       moveInProgress,
       score0,
       score1,
+      showGameOverModal,
     } = this.state;
     return (
       <>
@@ -211,16 +227,18 @@ class Game<P> extends Component<P> {
         <div style={{ height: '1rem' }} />
         <div className="button-container">
           <span>P1: {score0}</span>
-          {/* <button
-            className="button"
-            type="button"
-            onClick={this.tick}
-            disabled={this.state.buttonDisabled}
-          >
-            Tick
-          </button> */}
           <span>P2: {score1}</span>
         </div>
+        {showGameOverModal && (
+          // eslint-disable
+          <GameOverModal
+            score0={score0}
+            score1={score1}
+            closeModal={this.handleCloseGameOverModal}
+            resetGame={this.resetGameState}
+          />
+          // eslint-enable
+        )}
       </>
     );
   }

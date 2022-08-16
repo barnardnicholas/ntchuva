@@ -132,3 +132,8 @@ em,
   background-color: var(--main-typography);
   border-radius: 0;
 }
+
+.button-container {
+  display: flex;
+  justify-content: space-evenly;
+}
