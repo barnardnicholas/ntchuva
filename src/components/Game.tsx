@@ -26,12 +26,12 @@ interface GameState {
   score1: number;
 }
 
-class Game extends Component {
+class Game<P> extends Component<P> {
   /* eslint-disable */
   state: GameState;
   /* eslint-enable */
 
-  constructor(props?: any) {
+  constructor(props: Readonly<P>) {
     super(props);
 
     this.state = {
