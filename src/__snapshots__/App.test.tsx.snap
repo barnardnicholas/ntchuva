@@ -4,336 +4,533 @@ exports[`Renders the App correctly 1`] = `
 <div
   className="App"
 >
-  <h1>
-    Ntchuva
-  </h1>
   <div
-    className="board-container"
+    className="app-content"
+    id="app-content"
   >
-    <div
-      className="board"
-    >
-      <div
-        className="board-square"
-      >
-        <div>
-          Index 0
-        </div>
-        <h3>
-          0
-        </h3>
+    <header>
+      <h1>
+        Ntchuva
+      </h1>
+      <div>
+        Bao la Kujifunza/Bao for Beginners/Mbili-mbili
+      </div>
+    </header>
+    <main>
+      <div>
+        Player 1's turn
       </div>
       <div
-        className="board-square"
+        style={
+          Object {
+            "height": "1rem",
+          }
+        }
+      />
+      <div
+        className="board-container"
       >
-        <div>
-          Index 1
+        <div
+          className="board "
+          id="board1"
+        >
+          <div
+            className="board-square  disabled"
+            onClick={[Function]}
+            onKeyDown={[Function]}
+            role="button"
+            tabIndex={0}
+          >
+            <div
+              className="counter"
+            />
+            <div
+              className="counter"
+            />
+          </div>
+          <div
+            className="board-square  disabled"
+            onClick={[Function]}
+            onKeyDown={[Function]}
+            role="button"
+            tabIndex={0}
+          >
+            <div
+              className="counter"
+            />
+            <div
+              className="counter"
+            />
+          </div>
+          <div
+            className="board-square  disabled"
+            onClick={[Function]}
+            onKeyDown={[Function]}
+            role="button"
+            tabIndex={0}
+          >
+            <div
+              className="counter"
+            />
+            <div
+              className="counter"
+            />
+          </div>
+          <div
+            className="board-square  disabled"
+            onClick={[Function]}
+            onKeyDown={[Function]}
+            role="button"
+            tabIndex={0}
+          >
+            <div
+              className="counter"
+            />
+            <div
+              className="counter"
+            />
+          </div>
+          <div
+            className="board-square  disabled"
+            onClick={[Function]}
+            onKeyDown={[Function]}
+            role="button"
+            tabIndex={0}
+          >
+            <div
+              className="counter"
+            />
+            <div
+              className="counter"
+            />
+          </div>
+          <div
+            className="board-square  disabled"
+            onClick={[Function]}
+            onKeyDown={[Function]}
+            role="button"
+            tabIndex={0}
+          >
+            <div
+              className="counter"
+            />
+            <div
+              className="counter"
+            />
+          </div>
+          <div
+            className="board-square  disabled"
+            onClick={[Function]}
+            onKeyDown={[Function]}
+            role="button"
+            tabIndex={0}
+          >
+            <div
+              className="counter"
+            />
+            <div
+              className="counter"
+            />
+          </div>
+          <div
+            className="board-square  disabled"
+            onClick={[Function]}
+            onKeyDown={[Function]}
+            role="button"
+            tabIndex={0}
+          >
+            <div
+              className="counter"
+            />
+            <div
+              className="counter"
+            />
+          </div>
+          <div
+            className="board-square  disabled"
+            onClick={[Function]}
+            onKeyDown={[Function]}
+            role="button"
+            tabIndex={0}
+          >
+            <div
+              className="counter"
+            />
+            <div
+              className="counter"
+            />
+          </div>
+          <div
+            className="board-square  disabled"
+            onClick={[Function]}
+            onKeyDown={[Function]}
+            role="button"
+            tabIndex={0}
+          >
+            <div
+              className="counter"
+            />
+            <div
+              className="counter"
+            />
+          </div>
+          <div
+            className="board-square  disabled"
+            onClick={[Function]}
+            onKeyDown={[Function]}
+            role="button"
+            tabIndex={0}
+          >
+            <div
+              className="counter"
+            />
+            <div
+              className="counter"
+            />
+          </div>
+          <div
+            className="board-square  disabled"
+            onClick={[Function]}
+            onKeyDown={[Function]}
+            role="button"
+            tabIndex={0}
+          >
+            <div
+              className="counter"
+            />
+            <div
+              className="counter"
+            />
+          </div>
+          <div
+            className="board-square  disabled"
+            onClick={[Function]}
+            onKeyDown={[Function]}
+            role="button"
+            tabIndex={0}
+          >
+            <div
+              className="counter"
+            />
+            <div
+              className="counter"
+            />
+          </div>
+          <div
+            className="board-square  disabled"
+            onClick={[Function]}
+            onKeyDown={[Function]}
+            role="button"
+            tabIndex={0}
+          >
+            <div
+              className="counter"
+            />
+            <div
+              className="counter"
+            />
+          </div>
+          <div
+            className="board-square  disabled"
+            onClick={[Function]}
+            onKeyDown={[Function]}
+            role="button"
+            tabIndex={0}
+          >
+            <div
+              className="counter"
+            />
+            <div
+              className="counter"
+            />
+          </div>
+          <div
+            className="board-square  disabled"
+            onClick={[Function]}
+            onKeyDown={[Function]}
+            role="button"
+            tabIndex={0}
+          >
+            <div
+              className="counter"
+            />
+            <div
+              className="counter"
+            />
+          </div>
         </div>
-        <h3>
-          1
-        </h3>
+        <div
+          style={
+            Object {
+              "height": "1rem",
+            }
+          }
+        />
+        <div
+          className="board active"
+          id="board0"
+        >
+          <div
+            className="board-square  "
+            onClick={[Function]}
+            onKeyDown={[Function]}
+            role="button"
+            tabIndex={0}
+          >
+            <div
+              className="counter"
+            />
+            <div
+              className="counter"
+            />
+          </div>
+          <div
+            className="board-square  "
+            onClick={[Function]}
+            onKeyDown={[Function]}
+            role="button"
+            tabIndex={0}
+          >
+            <div
+              className="counter"
+            />
+            <div
+              className="counter"
+            />
+          </div>
+          <div
+            className="board-square  "
+            onClick={[Function]}
+            onKeyDown={[Function]}
+            role="button"
+            tabIndex={0}
+          >
+            <div
+              className="counter"
+            />
+            <div
+              className="counter"
+            />
+          </div>
+          <div
+            className="board-square  "
+            onClick={[Function]}
+            onKeyDown={[Function]}
+            role="button"
+            tabIndex={0}
+          >
+            <div
+              className="counter"
+            />
+            <div
+              className="counter"
+            />
+          </div>
+          <div
+            className="board-square  "
+            onClick={[Function]}
+            onKeyDown={[Function]}
+            role="button"
+            tabIndex={0}
+          >
+            <div
+              className="counter"
+            />
+            <div
+              className="counter"
+            />
+          </div>
+          <div
+            className="board-square  "
+            onClick={[Function]}
+            onKeyDown={[Function]}
+            role="button"
+            tabIndex={0}
+          >
+            <div
+              className="counter"
+            />
+            <div
+              className="counter"
+            />
+          </div>
+          <div
+            className="board-square  "
+            onClick={[Function]}
+            onKeyDown={[Function]}
+            role="button"
+            tabIndex={0}
+          >
+            <div
+              className="counter"
+            />
+            <div
+              className="counter"
+            />
+          </div>
+          <div
+            className="board-square  "
+            onClick={[Function]}
+            onKeyDown={[Function]}
+            role="button"
+            tabIndex={0}
+          >
+            <div
+              className="counter"
+            />
+            <div
+              className="counter"
+            />
+          </div>
+          <div
+            className="board-square  "
+            onClick={[Function]}
+            onKeyDown={[Function]}
+            role="button"
+            tabIndex={0}
+          >
+            <div
+              className="counter"
+            />
+            <div
+              className="counter"
+            />
+          </div>
+          <div
+            className="board-square  "
+            onClick={[Function]}
+            onKeyDown={[Function]}
+            role="button"
+            tabIndex={0}
+          >
+            <div
+              className="counter"
+            />
+            <div
+              className="counter"
+            />
+          </div>
+          <div
+            className="board-square  "
+            onClick={[Function]}
+            onKeyDown={[Function]}
+            role="button"
+            tabIndex={0}
+          >
+            <div
+              className="counter"
+            />
+            <div
+              className="counter"
+            />
+          </div>
+          <div
+            className="board-square  "
+            onClick={[Function]}
+            onKeyDown={[Function]}
+            role="button"
+            tabIndex={0}
+          >
+            <div
+              className="counter"
+            />
+            <div
+              className="counter"
+            />
+          </div>
+          <div
+            className="board-square  "
+            onClick={[Function]}
+            onKeyDown={[Function]}
+            role="button"
+            tabIndex={0}
+          >
+            <div
+              className="counter"
+            />
+            <div
+              className="counter"
+            />
+          </div>
+          <div
+            className="board-square  "
+            onClick={[Function]}
+            onKeyDown={[Function]}
+            role="button"
+            tabIndex={0}
+          >
+            <div
+              className="counter"
+            />
+            <div
+              className="counter"
+            />
+          </div>
+          <div
+            className="board-square  "
+            onClick={[Function]}
+            onKeyDown={[Function]}
+            role="button"
+            tabIndex={0}
+          >
+            <div
+              className="counter"
+            />
+            <div
+              className="counter"
+            />
+          </div>
+          <div
+            className="board-square  "
+            onClick={[Function]}
+            onKeyDown={[Function]}
+            role="button"
+            tabIndex={0}
+          >
+            <div
+              className="counter"
+            />
+            <div
+              className="counter"
+            />
+          </div>
+          <div
+            className="anim-hand-widget"
+            style={
+              Object {
+                "left": 0,
+                "opacity": 1,
+                "top": 0,
+              }
+            }
+          >
+            <h4>
+              0
+            </h4>
+          </div>
+        </div>
       </div>
       <div
-        className="board-square"
-      >
-        <div>
-          Index 2
-        </div>
-        <h3>
-          2
-        </h3>
-      </div>
+        style={
+          Object {
+            "height": "1rem",
+          }
+        }
+      />
       <div
-        className="board-square"
+        className="button-container"
       >
-        <div>
-          Index 3
-        </div>
-        <h3>
-          3
-        </h3>
+        <span>
+          P1: 
+          32
+        </span>
+        <span>
+          P2: 
+          32
+        </span>
       </div>
-      <div
-        className="board-square"
-      >
-        <div>
-          Index 4
-        </div>
-        <h3>
-          4
-        </h3>
-      </div>
-      <div
-        className="board-square"
-      >
-        <div>
-          Index 5
-        </div>
-        <h3>
-          5
-        </h3>
-      </div>
-      <div
-        className="board-square"
-      >
-        <div>
-          Index 6
-        </div>
-        <h3>
-          6
-        </h3>
-      </div>
-      <div
-        className="board-square"
-      >
-        <div>
-          Index 7
-        </div>
-        <h3>
-          7
-        </h3>
-      </div>
-      <div
-        className="board-square"
-      >
-        <div>
-          Index 8
-        </div>
-        <h3>
-          15
-        </h3>
-      </div>
-      <div
-        className="board-square"
-      >
-        <div>
-          Index 9
-        </div>
-        <h3>
-          14
-        </h3>
-      </div>
-      <div
-        className="board-square"
-      >
-        <div>
-          Index 10
-        </div>
-        <h3>
-          13
-        </h3>
-      </div>
-      <div
-        className="board-square"
-      >
-        <div>
-          Index 11
-        </div>
-        <h3>
-          12
-        </h3>
-      </div>
-      <div
-        className="board-square"
-      >
-        <div>
-          Index 12
-        </div>
-        <h3>
-          11
-        </h3>
-      </div>
-      <div
-        className="board-square"
-      >
-        <div>
-          Index 13
-        </div>
-        <h3>
-          10
-        </h3>
-      </div>
-      <div
-        className="board-square"
-      >
-        <div>
-          Index 14
-        </div>
-        <h3>
-          9
-        </h3>
-      </div>
-      <div
-        className="board-square"
-      >
-        <div>
-          Index 15
-        </div>
-        <h3>
-          8
-        </h3>
-      </div>
-      <div
-        className="board-square"
-      >
-        <div>
-          Index 16
-        </div>
-        <h3>
-          0
-        </h3>
-      </div>
-      <div
-        className="board-square"
-      >
-        <div>
-          Index 17
-        </div>
-        <h3>
-          1
-        </h3>
-      </div>
-      <div
-        className="board-square"
-      >
-        <div>
-          Index 18
-        </div>
-        <h3>
-          2
-        </h3>
-      </div>
-      <div
-        className="board-square"
-      >
-        <div>
-          Index 19
-        </div>
-        <h3>
-          3
-        </h3>
-      </div>
-      <div
-        className="board-square"
-      >
-        <div>
-          Index 20
-        </div>
-        <h3>
-          4
-        </h3>
-      </div>
-      <div
-        className="board-square"
-      >
-        <div>
-          Index 21
-        </div>
-        <h3>
-          5
-        </h3>
-      </div>
-      <div
-        className="board-square"
-      >
-        <div>
-          Index 22
-        </div>
-        <h3>
-          6
-        </h3>
-      </div>
-      <div
-        className="board-square"
-      >
-        <div>
-          Index 23
-        </div>
-        <h3>
-          7
-        </h3>
-      </div>
-      <div
-        className="board-square"
-      >
-        <div>
-          Index 24
-        </div>
-        <h3>
-          15
-        </h3>
-      </div>
-      <div
-        className="board-square"
-      >
-        <div>
-          Index 25
-        </div>
-        <h3>
-          14
-        </h3>
-      </div>
-      <div
-        className="board-square"
-      >
-        <div>
-          Index 26
-        </div>
-        <h3>
-          13
-        </h3>
-      </div>
-      <div
-        className="board-square"
-      >
-        <div>
-          Index 27
-        </div>
-        <h3>
-          12
-        </h3>
-      </div>
-      <div
-        className="board-square"
-      >
-        <div>
-          Index 28
-        </div>
-        <h3>
-          11
-        </h3>
-      </div>
-      <div
-        className="board-square"
-      >
-        <div>
-          Index 29
-        </div>
-        <h3>
-          10
-        </h3>
-      </div>
-      <div
-        className="board-square"
-      >
-        <div>
-          Index 30
-        </div>
-        <h3>
-          9
-        </h3>
-      </div>
-      <div
-        className="board-square"
-      >
-        <div>
-          Index 31
-        </div>
-        <h3>
-          8
-        </h3>
-      </div>
-    </div>
+    </main>
+    <footer />
   </div>
 </div>
 `;
