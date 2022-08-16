@@ -62,8 +62,8 @@ $square-width: calc((100vmin - 2rem) / 8);
         position: absolute;
         bottom: 5%;
         right: 5%;
-        width: 33%;
-        height: 33%;
+        width: 40%;
+        height: 40%;
         background-color: var(--main-typography);
         border-radius: 50%;
         z-index: 20;
@@ -73,7 +73,7 @@ $square-width: calc((100vmin - 2rem) / 8);
 
         h4 {
           color: var(--main-background);
-          font-size: 100%;
+          font-size: 80%;
         }
       }
     }

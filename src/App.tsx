@@ -6,12 +6,12 @@ function App() {
   return (
     <div className="App">
       <div className="app-content">
-        <div className="title-container">
+        <header>
           <h1>Ntchuva</h1>
           <div>Bao la Kujifunza/Bao for Beginners/Mbili-mbili</div>
-        </div>
+        </header>
         <Game />
-        <div />
+        <footer />
       </div>
     </div>
   );
