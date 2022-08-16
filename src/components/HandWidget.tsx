@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import usePrevious from '../hooks/usePrevious';
 import { PathSquare } from '../types/board';
 import { getColumnFromPathSquare } from '../utils/utils';
+import HandCounter from './HandCounter';
 
 interface HandWidgetProps {
   visible: boolean;
@@ -34,18 +35,22 @@ function HandWidget({ visible, activeSquare, hand, moveInProgress }: HandWidgetP
 
   const styles = {
     opacity: visible ? 1 : 0,
-    top: `calc(${(activeSquare > 7 ? 50 : 0) + squareWidth / 2}% - 1rem )`,
+    top: `calc(${(activeSquare > 7 ? 50 : 0) + squareWidth / 2 - 10}% )`,
     left: `calc(${getColumnFromPathSquare(activeSquare as PathSquare) * squareWidth}% - 1rem + ${
       squareWidth / 2
     }%)`,
   };
+
+  const intHand: number[] = new Array(hand).fill(0).map((_: number, i: number) => i);
 
   return (
     <div
       className={`anim-hand-widget ${extraClasses}`}
       style={moveInProgress ? styles : defaultStyles}
     >
-      <h4>{hand}</h4>
+      {intHand.map((n: number) => {
+        return <HandCounter key={`${n}`} top={`${0 - n * 1}rem`} />;
+      })}
     </div>
   );
 }
