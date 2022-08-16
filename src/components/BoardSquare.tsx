@@ -7,7 +7,6 @@ interface BoardSquareProps {
   square: BoardSquare;
   isActive: boolean;
   handleMove: (pathSquare: PathSquare) => void;
-  hand: number;
   disabled: boolean;
   moveInProgress: boolean;
 }
@@ -15,7 +14,6 @@ function BoardSquareComponent({
   square,
   isActive,
   handleMove,
-  hand,
   disabled,
   moveInProgress,
 }: BoardSquareProps) {
@@ -36,19 +34,9 @@ function BoardSquareComponent({
       role="button"
       tabIndex={0}
     >
-      {/* <div>{`Index ${i}`}</div>
-      <div>{`Player ${player}`}</div>
-      <div>{`Column ${column}`}</div>
-      <div>{`Path ${pathOrder}`}</div> */}
-
       {counters.map((j: number) => (
         <Counter key={j} />
       ))}
-      {isActive && hand > 0 && (
-        <div className="hand-widget">
-          <h4>{hand}</h4>
-        </div>
-      )}
     </div>
   );
 }

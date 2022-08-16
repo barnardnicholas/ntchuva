@@ -11,6 +11,7 @@ $square-width: calc((100vmin - 2rem) / 8);
     grid-template-rows: repeat(2, 1fr);
     grid-template-columns: repeat(8, 1fr);
     width: fit-content;
+    position: relative;
 
     &.active {
       border: 1px solid var(--main-typography);
@@ -31,6 +32,7 @@ $square-width: calc((100vmin - 2rem) / 8);
       justify-content: center;
       align-items: center;
       flex-wrap: wrap;
+      transition: background-color 0.3s ease;
 
       &.active {
         background-color: #444444;
@@ -57,24 +59,30 @@ $square-width: calc((100vmin - 2rem) / 8);
         border-radius: 50%;
         margin: 0.1rem;
       }
+    }
 
-      .hand-widget {
-        position: absolute;
-        bottom: 5%;
-        right: 5%;
-        width: 40%;
-        height: 40%;
-        background-color: var(--main-typography);
-        border-radius: 50%;
-        z-index: 20;
-        display: flex;
-        justify-content: center;
-        align-items: center;
+    .anim-hand-widget {
+      position: absolute;
+      left: 0;
+      right: 0;
+      width: 2rem;
+      height: 2rem;
+      background-color: var(--main-typography);
+      border-radius: 50%;
+      z-index: 20;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      pointer-events: none;
+      transition: left 0 ease, top 0 ease;
 
-        h4 {
-          color: var(--main-background);
-          font-size: 80%;
-        }
+      &.with-transition {
+        transition: left 0.2s ease, top 0.2s ease;
+      }
+
+      h4 {
+        color: var(--main-background);
+        font-size: 1rem;
       }
     }
   }

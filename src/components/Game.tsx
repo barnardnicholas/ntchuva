@@ -7,6 +7,7 @@ import {
   isSquareInFrontRow,
 } from '../utils/utils';
 import BoardSquareComponent from './BoardSquare';
+import HandWidget from './HandWidget';
 import GameOverModal from './modals/GameOverModal';
 
 /* eslint-disable */
@@ -49,7 +50,6 @@ class Game<P> extends Component<P> {
 
   constructor(props: Readonly<P>) {
     super(props);
-
     this.state = { ...initialState };
   }
 
@@ -196,32 +196,46 @@ class Game<P> extends Component<P> {
         <div>{`Player ${activePlayer + 1}'s turn`}</div>
         <div style={{ height: '1rem' }} />
         <div className="board-container">
-          <div className={`board ${activePlayer === 1 ? 'active' : ''}`}>
+          <div id="board1" className={`board ${activePlayer === 1 ? 'active' : ''}`}>
             {board1.map((square: BoardSquare) => (
               <BoardSquareComponent
                 key={`${square.i}-${square.player}`}
                 square={square}
                 isActive={activeSquare1 === square.pathOrder && activePlayer === square.player}
                 handleMove={this.handleMove}
-                hand={hand}
                 disabled={activePlayer !== 1 || (square.value < 2 && !isBoard1EndGame)}
                 moveInProgress={moveInProgress}
               />
             ))}
+            <HandWidget
+              visible={moveInProgress && activePlayer === 1}
+              player={0}
+              activePlayer={activePlayer}
+              activeSquare={[activeSquare0, activeSquare1][activePlayer]}
+              hand={hand}
+              moveInProgress={moveInProgress}
+            />
           </div>
           <div style={{ height: '1rem' }} />
-          <div className={`board ${activePlayer === 0 ? 'active' : ''}`}>
+          <div id="board0" className={`board ${activePlayer === 0 ? 'active' : ''}`}>
             {board0.map((square: BoardSquare) => (
               <BoardSquareComponent
                 key={`${square.i}-${square.player}`}
                 square={square}
                 isActive={activeSquare0 === square.pathOrder && activePlayer === square.player}
                 handleMove={this.handleMove}
-                hand={hand}
                 disabled={activePlayer !== 0 || (square.value < 2 && !isBoard0EndGame)}
                 moveInProgress={moveInProgress}
               />
             ))}
+            <HandWidget
+              visible={moveInProgress && activePlayer === 0}
+              player={0}
+              activePlayer={activePlayer}
+              activeSquare={[activeSquare0, activeSquare1][activePlayer]}
+              hand={hand}
+              moveInProgress={moveInProgress}
+            />
           </div>
         </div>
         <div style={{ height: '1rem' }} />
