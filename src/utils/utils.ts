@@ -24,6 +24,17 @@ export const getPathOrderFromIndex = (i: number): PathSquare => {
 };
 
 /**
+ * Calculate a board square's column given its path number
+ * @param pathSquare - Number of path square (0-31) (zero-indexed)
+ * @return Column number (0-7) (zero-indexed)
+ */
+export const getColumnFromPathSquare = (pathSquare: PathSquare): BoardColumn => {
+  let intI: PathSquare = pathSquare;
+  if (intI > 7) intI = (16 - (intI - 7)) as PathSquare;
+  return (intI % 8) as BoardColumn;
+};
+
+/**
  * Build 16 squares in a circle for one player
  * @param player - 0 or 1 (2 players)
  * @return Array of 16 square objects

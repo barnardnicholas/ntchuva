@@ -3,6 +3,7 @@ import { BoardSquare, PathSquare, PlayerIndex } from '../types/board';
 import {
   buildBoardSquares,
   getColumnFromIndex,
+  getColumnFromPathSquare,
   getIndexOfPathSquare,
   getNextPathSquare,
   getPathOrderFromIndex,
@@ -52,6 +53,42 @@ describe('getColumnFromIndex', () => {
     expect(getColumnFromIndex(15)).toEqual(7);
     expect(getColumnFromIndex(23)).toEqual(7);
     expect(getColumnFromIndex(31)).toEqual(7);
+  });
+});
+
+// ------------------------------------------------------------------------
+
+describe('getColumnFromPathSquare', () => {
+  test('Returns a number', () => {
+    boardIndexes.forEach((i: number) => {
+      expect(Number.isNaN(getColumnFromPathSquare(i as PathSquare))).toEqual(false);
+    });
+  });
+  test('Returns a number between 0 and 7', () => {
+    boardIndexes.forEach((i: number) => {
+      expect(getColumnFromPathSquare(i as PathSquare)).toBeGreaterThanOrEqual(0);
+      expect(getColumnFromPathSquare(i as PathSquare)).toBeLessThanOrEqual(7);
+    });
+  });
+  test('Returns 0 for indexes 0, 15', () => {
+    expect(getColumnFromPathSquare(0)).toEqual(0);
+    expect(getColumnFromPathSquare(15)).toEqual(0);
+  });
+  test('Returns 1 for indexes 1, 14', () => {
+    expect(getColumnFromPathSquare(1)).toEqual(1);
+    expect(getColumnFromPathSquare(14)).toEqual(1);
+  });
+  test('Returns 3 for indexes 3, 12', () => {
+    expect(getColumnFromPathSquare(3)).toEqual(3);
+    expect(getColumnFromPathSquare(12)).toEqual(3);
+  });
+  test('Returns 6 for indexes 6, 9', () => {
+    expect(getColumnFromPathSquare(6)).toEqual(6);
+    expect(getColumnFromPathSquare(9)).toEqual(6);
+  });
+  test('Returns 7 for indexes 7, 8', () => {
+    expect(getColumnFromPathSquare(7)).toEqual(7);
+    expect(getColumnFromPathSquare(8)).toEqual(7);
   });
 });
 
