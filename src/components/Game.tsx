@@ -37,8 +37,8 @@ const initialState: GameState = {
   moveInProgress: false,
   isBoard0EndGame: false,
   isBoard1EndGame: false,
-  score0: 0,
-  score1: 0,
+  score0: 32,
+  score1: 32,
   showGameOverModal: false,
 };
 
@@ -192,7 +192,7 @@ class Game<P> extends Component<P> {
       showGameOverModal,
     } = this.state;
     return (
-      <>
+      <main>
         <div>{`Player ${activePlayer + 1}'s turn`}</div>
         <div style={{ height: '1rem' }} />
         <div className="board-container">
@@ -239,7 +239,7 @@ class Game<P> extends Component<P> {
           />
           // eslint-enable
         )}
-      </>
+      </main>
     );
   }
 }
