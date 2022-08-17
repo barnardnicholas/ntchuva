@@ -10,10 +10,7 @@ interface HandWidgetProps {
   hand: number;
   moveInProgress: boolean;
 }
-/* eslint-disable */
 function HandWidget({ visible, activeSquare, hand, moveInProgress }: HandWidgetProps) {
-  /* eslint-enable */
-
   const prevProps = usePrevious({ moveInProgress });
 
   const [extraClasses, setExtraClasses] = useState<string>('');
