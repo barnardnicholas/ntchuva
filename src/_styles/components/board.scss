@@ -28,10 +28,6 @@ $square-width: calc((100vmin - 2rem) / 8);
       cursor: pointer;
       position: relative;
       z-index: 1;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      flex-wrap: wrap;
       transition: background-color 0.3s ease;
 
       &.active {
@@ -58,6 +54,9 @@ $square-width: calc((100vmin - 2rem) / 8);
         background-color: var(--main-typography);
         border-radius: 50%;
         margin: 0.1rem;
+        position: absolute;
+        top: calc(50% - 10%);
+        left: calc(50% - 10%);
       }
     }
 

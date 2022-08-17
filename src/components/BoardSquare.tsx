@@ -1,7 +1,7 @@
 import React from 'react';
 import { BoardSquare, PathSquare } from '../types/board';
 import { dummyKeyDown } from '../utils/utils';
-import Counter from './Counter';
+import SquareCounters from './SquareCounters';
 
 interface BoardSquareProps {
   square: BoardSquare;
@@ -18,7 +18,6 @@ function BoardSquareComponent({
   moveInProgress,
 }: BoardSquareProps) {
   const { i, player, pathOrder, value } = square;
-  const counters: number[] = new Array(value).fill(0).map((_: number, j: number) => j);
 
   function handleClick() {
     if (moveInProgress) return;
@@ -34,9 +33,7 @@ function BoardSquareComponent({
       role="button"
       tabIndex={0}
     >
-      {counters.map((j: number) => (
-        <Counter key={j} />
-      ))}
+      <SquareCounters value={value} />
     </div>
   );
 }
