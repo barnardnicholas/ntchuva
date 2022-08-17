@@ -1,5 +1,6 @@
 import React from 'react';
 import { useSpring, config, animated } from 'react-spring';
+import usePrevious from '../hooks/usePrevious';
 
 interface CounterProps {
   top: string;
@@ -7,9 +8,10 @@ interface CounterProps {
 }
 
 function Counter({ top, left }: CounterProps) {
+  const prevProps = usePrevious({ top, left });
   const styles = useSpring({
     config: { ...config.wobbly },
-    from: { top: `${40}%`, left: `${40}%` },
+    from: prevProps,
     to: {
       top,
       left,
