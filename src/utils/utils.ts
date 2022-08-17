@@ -92,3 +92,27 @@ export function getIndexOfPathSquare(pathSquare: PathSquare, board: BoardSquare[
   if (result && !Number.isNaN(result.i)) return result.i;
   return -1;
 }
+
+/**
+ * Rotate an XY point around a center XY by a certain angle
+ * @param cx - centerX
+ * @param cy - centerY
+ * @param x - startX
+ * @param y - startY
+ * @param angle - angle to rotate in degrees
+ * @return {{x, y}} resulting coords
+ */
+export function rotate(
+  cx: number,
+  cy: number,
+  x: number,
+  y: number,
+  angle: number,
+): { x: number; y: number } {
+  const radians = (Math.PI / 180) * (angle * -1);
+  const cos = Math.cos(radians);
+  const sin = Math.sin(radians);
+  const nx = cos * (x - cx) + sin * (y - cy) + cx;
+  const ny = cos * (y - cy) - sin * (x - cx) + cy;
+  return { x: nx, y: ny };
+}

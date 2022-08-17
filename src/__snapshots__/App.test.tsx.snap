@@ -266,11 +266,7 @@ exports[`Renders the App correctly 1`] = `
                 "top": "calc(50% - 1rem)",
               }
             }
-          >
-            <h4>
-              0
-            </h4>
-          </div>
+          />
         </div>
         <div
           style={
@@ -516,11 +512,7 @@ exports[`Renders the App correctly 1`] = `
                 "top": "calc(50% - 1rem)",
               }
             }
-          >
-            <h4>
-              0
-            </h4>
-          </div>
+          />
         </div>
       </div>
       <div

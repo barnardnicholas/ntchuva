@@ -8,6 +8,7 @@ import {
   getNextPathSquare,
   getPathOrderFromIndex,
   isSquareInFrontRow,
+  rotate,
 } from './utils';
 
 // ------------------------------------------------------------------------
@@ -246,5 +247,18 @@ describe('getIndexOfPathSquare', () => {
         getIndexOfPathSquare(boardSquare.pathOrder as PathSquare, board as BoardSquare[]),
       ).toEqual(boardSquare.i);
     });
+  });
+});
+
+// ------------------------------------------------------------------------
+
+describe('rotate', () => {
+  test('Returns correct angles for 90 degree increements', () => {
+    expect(Number(rotate(50, 50, 50, 0, 90).x).toFixed(3)).toEqual(Number(100).toFixed(3));
+    expect(Number(rotate(50, 50, 50, 0, 90).y).toFixed(3)).toEqual(Number(50).toFixed(3));
+    expect(Number(rotate(50, 50, 50, 0, 180).x).toFixed(3)).toEqual(Number(50).toFixed(3));
+    expect(Number(rotate(50, 50, 50, 0, 180).y).toFixed(3)).toEqual(Number(100).toFixed(3));
+    expect(Number(rotate(50, 50, 50, 0, 270).x).toFixed(3)).toEqual(Number(0).toFixed(3));
+    expect(Number(rotate(50, 50, 50, 0, 270).y).toFixed(3)).toEqual(Number(50).toFixed(3));
   });
 });
