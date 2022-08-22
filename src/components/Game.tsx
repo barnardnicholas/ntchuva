@@ -124,7 +124,9 @@ class Game<P> extends Component<P> {
       if (square.column === column) return { ...square, value: 0 };
       return square;
     });
-    this.setState({ [`board${player}`]: board });
+    this.setState({
+      [`board${player}`]: board,
+    });
   };
 
   tick = () => {
@@ -168,6 +170,8 @@ class Game<P> extends Component<P> {
         activeSquare1: -1,
         activePlayer: !activePlayer ? 1 : 0,
         moveInProgress: false,
+        score0: board0.reduce((acc: number, curr: BoardSquare) => acc + curr.value, 0),
+        score1: board1.reduce((acc: number, curr: BoardSquare) => acc + curr.value, 0),
       }); // Update state and end turn
     }
   };
@@ -193,7 +197,11 @@ class Game<P> extends Component<P> {
     } = this.state;
     return (
       <main>
-        <div>{`Player ${activePlayer + 1}'s turn`}</div>
+        <div>
+          {score0 <= 0 || score1 <= 0
+            ? `Player ${score0 <= 0 ? '2' : '1'} wins!`
+            : `Player ${activePlayer + 1}'s turn`}
+        </div>
         <div style={{ height: '1rem' }} />
         <div className="board-container">
           <div id="board1" className={`board ${activePlayer === 1 ? 'active' : ''}`}>
