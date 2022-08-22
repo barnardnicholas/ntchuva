@@ -1,4 +1,4 @@
-import { boardIndexes } from '../constants/board';
+import { boardIndexes, ringNumbers } from '../constants/board';
 import { BoardColumn, BoardSquare, PathSquare, PlayerIndex } from '../types/board';
 
 /**
@@ -115,4 +115,14 @@ export function rotate(
   const nx = cos * (x - cx) + sin * (y - cy) + cx;
   const ny = cos * (y - cy) - sin * (x - cx) + cy;
   return { x: nx, y: ny };
+}
+
+/**
+ * Get arrangement of concentric ring numbers from value
+ * @param value - value of square
+ * @return array of ring numbers
+ */
+export function getRingNumbers(value: number): number[] {
+  if (value > 14) return [5, value - 5];
+  return ringNumbers[value - 1];
 }

@@ -7,6 +7,7 @@ import {
   getIndexOfPathSquare,
   getNextPathSquare,
   getPathOrderFromIndex,
+  getRingNumbers,
   isSquareInFrontRow,
   rotate,
 } from './utils';
@@ -260,5 +261,22 @@ describe('rotate', () => {
     expect(Number(rotate(50, 50, 50, 0, 180).y).toFixed(3)).toEqual(Number(100).toFixed(3));
     expect(Number(rotate(50, 50, 50, 0, 270).x).toFixed(3)).toEqual(Number(0).toFixed(3));
     expect(Number(rotate(50, 50, 50, 0, 270).y).toFixed(3)).toEqual(Number(50).toFixed(3));
+  });
+});
+
+// ------------------------------------------------------------------------
+
+describe('getRingNumbers', () => {
+  test('returns a valid array of numbers', () => {
+    expect(getRingNumbers(1)).toEqual([1]);
+    expect(getRingNumbers(4)).toEqual([4]);
+    expect(getRingNumbers(5)).toEqual([1, 4]);
+    expect(getRingNumbers(7)).toEqual([1, 6]);
+    expect(getRingNumbers(8)).toEqual([2, 6]);
+    expect(getRingNumbers(9)).toEqual([3, 6]);
+    expect(getRingNumbers(11)).toEqual([4, 7]);
+    expect(getRingNumbers(14)).toEqual([4, 10]);
+    expect(getRingNumbers(15)).toEqual([5, 10]);
+    expect(getRingNumbers(40)).toEqual([5, 35]);
   });
 });
