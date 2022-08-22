@@ -1,4 +1,5 @@
 $square-width: calc((100vmin - 2rem) / 8);
+$counter-width: calc(0.2 * $square-width);
 
 .board-container {
   display: flex;
@@ -49,8 +50,8 @@ $square-width: calc((100vmin - 2rem) / 8);
       }
 
       .counter {
-        width: 20%;
-        height: 20%;
+        width: $counter-width;
+        height: $counter-width;
         background-color: var(--main-typography);
         border-radius: 50%;
         margin: 0.1rem;
@@ -72,8 +73,8 @@ $square-width: calc((100vmin - 2rem) / 8);
       overflow: visible;
 
       .hand-counter {
-        width: 1.5rem;
-        height: 1.5rem;
+        width: $counter-width;
+        height: $counter-width;
         background-color: var(--main-typography);
         border-radius: 50%;
         margin: 0.1rem;
