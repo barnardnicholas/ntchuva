@@ -111,7 +111,7 @@ class Game extends Component<{
       }
     }
 
-    if (resetFlag && !prevProps.resetFlag) this.resetGameState();
+    if (resetFlag && !prevProps.resetFlag) this.resetGameState(); // Handle reset button
   }
 
   componentWillUnmount() {
