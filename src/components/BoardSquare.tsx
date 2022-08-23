@@ -6,7 +6,7 @@ import SquareCounters from './SquareCounters';
 interface BoardSquareProps {
   square: BoardSquare;
   isActive: boolean;
-  handleMove: (pathSquare: PathSquare) => void;
+  handleMove: (pathSquare: PathSquare, isInitialEvent?: boolean) => void;
   disabled: boolean;
   moveInProgress: boolean;
 }
@@ -21,7 +21,7 @@ function BoardSquareComponent({
 
   function handleClick() {
     if (moveInProgress) return;
-    handleMove(pathOrder);
+    handleMove(pathOrder, true);
   }
 
   return (

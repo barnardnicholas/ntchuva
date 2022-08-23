@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { maxMoveLength } from '../constants/board';
 import { BoardColumn, BoardSquare, PathSquare, PlayerIndex } from '../types/board';
 import {
   buildBoardSquares,
@@ -26,6 +27,7 @@ interface GameState {
   score0: number;
   score1: number;
   showGameOverModal: boolean;
+  currentMoveLength: number;
 }
 
 const initialState: GameState = {
@@ -41,6 +43,7 @@ const initialState: GameState = {
   score0: 32,
   score1: 32,
   showGameOverModal: false,
+  currentMoveLength: 0,
 };
 
 class Game<P> extends Component<P> {
@@ -96,7 +99,7 @@ class Game<P> extends Component<P> {
     this.setState(initialState);
   };
 
-  handleMove = (pathSquare: PathSquare): void => {
+  handleMove = (pathSquare: PathSquare, isInitialEvent?: boolean): void => {
     const { board0, board1, activePlayer } = this.state;
     clearInterval(masterTimer);
     const board = [...[board0, board1][activePlayer]];
@@ -113,6 +116,7 @@ class Game<P> extends Component<P> {
       [`activeSquare${activePlayer}`]: pathSquare,
       hand: newSquare.value,
     };
+    if (isInitialEvent) newState.currentMoveLength = 0;
     this.setState(newState);
     masterTimer = setInterval(this.tick, 333);
   };
@@ -130,7 +134,8 @@ class Game<P> extends Component<P> {
   };
 
   tick = () => {
-    const { hand, board0, board1, activePlayer, activeSquare0, activeSquare1 } = this.state;
+    const { hand, board0, board1, activePlayer, activeSquare0, activeSquare1, currentMoveLength } =
+      this.state;
 
     const board = [...[board0, board1][activePlayer]]; // Select correct board based on activePlayer and make a copy for private use
     const activeSquare: PathSquare = [activeSquare0, activeSquare1][activePlayer] as PathSquare; // Select correct activeSquare based on activePlayer
@@ -147,6 +152,7 @@ class Game<P> extends Component<P> {
 
       const newState: Record<string, number | boolean | BoardSquare[]> = {
         hand: hand - 1,
+        currentMoveLength: currentMoveLength + 1,
       }; // Establish new state
 
       if (activeSquare !== newActiveSquare) {
@@ -155,7 +161,11 @@ class Game<P> extends Component<P> {
       } // Mutate state if necessary
 
       this.setState(newState); // Update state
-    } else if (hand <= 0 && board[getIndexOfPathSquare(activeSquare, board)].value > 1) {
+    } else if (
+      hand <= 0 &&
+      board[getIndexOfPathSquare(activeSquare, board)].value > 1 &&
+      currentMoveLength <= maxMoveLength
+    ) {
       // There are no more counters in hand, but the final square has more than one, so move again
       this.handleMove(activeSquare);
     } else {
@@ -172,6 +182,7 @@ class Game<P> extends Component<P> {
         moveInProgress: false,
         score0: board0.reduce((acc: number, curr: BoardSquare) => acc + curr.value, 0),
         score1: board1.reduce((acc: number, curr: BoardSquare) => acc + curr.value, 0),
+        currentMoveLength: 0,
       }); // Update state and end turn
     }
   };
@@ -194,6 +205,7 @@ class Game<P> extends Component<P> {
       score0,
       score1,
       showGameOverModal,
+      currentMoveLength,
     } = this.state;
     return (
       <main>
@@ -202,6 +214,7 @@ class Game<P> extends Component<P> {
             ? `Player ${score0 <= 0 ? '2' : '1'} wins!`
             : `Player ${activePlayer + 1}'s turn`}
         </div>
+        <div>Move length: {currentMoveLength}</div>
         <div style={{ height: '1rem' }} />
         <div className="board-container">
           <div id="board1" className={`board ${activePlayer === 1 ? 'active' : ''}`}>
