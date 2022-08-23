@@ -1,18 +1,19 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Game from './components/Game';
+import Settings from './components/settings/Settings';
+import Header from './components/header/Header';
 import './_styles/App.scss';
+import BackgroundBlocker from './components/BackgroundBlocker';
 
 function App() {
+  const [showSettings, setShowSettings] = useState<boolean>(false);
+
   return (
     <div className="App">
-      <div className="app-content">
-        <header>
-          <h1>Ntchuva</h1>
-          <div>Bao la Kujifunza/Bao for Beginners/Mbili-mbili</div>
-        </header>
-        <Game />
-        <footer />
-      </div>
+      <Game />
+      <BackgroundBlocker showSettings={showSettings} handleClick={() => setShowSettings(false)} />
+      <Settings showSettings={showSettings} />
+      <Header showSettings={showSettings} setShowSettings={setShowSettings} />
     </div>
   );
 }

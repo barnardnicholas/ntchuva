@@ -214,7 +214,6 @@ class Game<P> extends Component<P> {
             ? `Player ${score0 <= 0 ? '2' : '1'} wins!`
             : `Player ${activePlayer + 1}'s turn`}
         </div>
-        <div>Move length: {currentMoveLength}</div>
         <div style={{ height: '1rem' }} />
         <div className="board-container">
           <div id="board1" className={`board ${activePlayer === 1 ? 'active' : ''}`}>

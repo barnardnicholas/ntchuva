@@ -29,18 +29,12 @@ canvas {
   background-color: var(--main-background);
   color: var(--main-typography);
   display: flex;
+  flex-direction: column;
   justify-content: center;
+  align-items: center;
   padding: 1rem;
 
   @include transitionColors();
-}
-
-.app-content {
-  max-width: 100vmin;
-  text-align: center;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
 }
 
 h1 {
