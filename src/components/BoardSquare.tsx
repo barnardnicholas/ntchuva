@@ -21,6 +21,7 @@ function BoardSquareComponent({
 
   function handleClick() {
     if (moveInProgress) return;
+    if (!square.value) return;
     handleMove(pathOrder, true);
   }
 

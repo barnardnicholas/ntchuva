@@ -14,7 +14,7 @@ const middleware = [thunk];
 const persistConfig = {
   key: 'root',
   storage,
-  blacklist: ['scenariosReducer', 'settingsReducer', 'mixerReducer'], // Don't persist these reducers
+  blacklist: [], // Don't persist these reducers
 };
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
