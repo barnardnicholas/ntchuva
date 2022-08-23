@@ -33,6 +33,7 @@ canvas {
   justify-content: center;
   align-items: center;
   padding: 1rem;
+  text-align: center;
 
   @include transitionColors();
 }
@@ -90,7 +91,7 @@ em,
   }
 
   &.semi-hidden {
-    opacity: 0.75;
+    opacity: 0.85;
   }
 }
 

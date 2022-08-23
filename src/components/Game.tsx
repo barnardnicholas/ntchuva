@@ -8,6 +8,7 @@ import {
   isSquareInFrontRow,
 } from '../utils/utils';
 import BoardSquareComponent from './BoardSquare';
+import Button from './form/Button';
 import HandWidget from './HandWidget';
 import GameOverModal from './modals/GameOverModal';
 
@@ -256,6 +257,7 @@ class Game<P> extends Component<P> {
         <div style={{ height: '1rem' }} />
         <div className="button-container">
           <span>P1: {score0}</span>
+          <Button text="Reset" onClick={this.resetGameState} icon="undo" />
           <span>P2: {score1}</span>
         </div>
         {showGameOverModal && (
