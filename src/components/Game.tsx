@@ -205,7 +205,6 @@ class Game<P> extends Component<P> {
       score0,
       score1,
       showGameOverModal,
-      currentMoveLength,
     } = this.state;
     return (
       <main>
