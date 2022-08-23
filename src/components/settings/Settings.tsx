@@ -1,22 +1,18 @@
-import React, { Dispatch, SetStateAction } from 'react';
+import React from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { toggleDarkMode } from '../../redux/actions/darkMode';
+import { toggleAutoMove } from '../../redux/actions/settings';
+import { getDarkMode } from '../../redux/selectors/darkMode';
+import { getAutoMove, getShowSettings } from '../../redux/selectors/settings';
 import Divider from '../Divider';
 import ToggleSwitch from '../form/ToggleSwitch';
 
-interface SettingsProps {
-  showSettings: boolean;
-  isDarkMode: boolean;
-  setIsDarkMode: Dispatch<SetStateAction<boolean>>;
-  autoMove: boolean;
-  setAutoMove: Dispatch<SetStateAction<boolean>>;
-}
+function Settings() {
+  const dispatch = useDispatch();
+  const showSettings = useSelector(getShowSettings);
+  const darkMode = useSelector(getDarkMode);
+  const autoMove = useSelector(getAutoMove);
 
-function Settings({
-  showSettings,
-  isDarkMode,
-  setIsDarkMode,
-  autoMove,
-  setAutoMove,
-}: SettingsProps) {
   return (
     <div className={`settings-container ${showSettings ? 'expanded' : ''}`}>
       <div className="settings">
@@ -24,11 +20,9 @@ function Settings({
         <Divider />
         <ToggleSwitch
           label="Dark theme"
-          value={isDarkMode}
+          value={darkMode}
           name="darkMode"
-          onChange={(_: string, value) => {
-            setIsDarkMode(value);
-          }}
+          onChange={(_: string, value) => dispatch(toggleDarkMode(value))}
         />
         <Divider />
         <ToggleSwitch
@@ -36,7 +30,7 @@ function Settings({
           value={autoMove}
           name="darkMode"
           onChange={(_: string, value) => {
-            setAutoMove(value);
+            dispatch(toggleAutoMove(value));
           }}
         />
         <Divider />

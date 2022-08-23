@@ -1,16 +1,17 @@
-import React, { Dispatch, SetStateAction } from 'react';
+import React from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { toggleSettings } from '../../redux/actions/settings';
+import { getShowSettings } from '../../redux/selectors/settings';
 import { dummyKeyDown } from '../../utils/utils';
 
-interface SettingsButtonProps {
-  showSettings: boolean;
-  setShowSettings: Dispatch<SetStateAction<boolean>>;
-}
+function SettingsButton() {
+  const dispatch = useDispatch();
+  const showSettings = useSelector(getShowSettings);
 
-function SettingsButton({ showSettings, setShowSettings }: SettingsButtonProps) {
   return (
     <button
       className={`settings-button ${showSettings ? 'active' : ''}`}
-      onClick={() => setShowSettings(!showSettings)}
+      onClick={() => dispatch(toggleSettings(!showSettings))}
       type="button"
       onKeyDown={dummyKeyDown}
     >

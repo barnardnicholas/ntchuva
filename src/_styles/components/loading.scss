@@ -1,0 +1,33 @@
+@keyframes spinner {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.loading-screen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+
+  color: var(--main-typography);
+  @include bodyText();
+
+  i {
+    font-size: 6rem;
+    animation: spinner infinite 4s linear;
+    position: relative;
+    margin-bottom: 2rem;
+  }
+}

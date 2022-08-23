@@ -1,14 +1,14 @@
-import React, { Dispatch, SetStateAction } from 'react';
+import React from 'react';
+import { useDispatch } from 'react-redux';
+import { toggleResetFlag } from '../../redux/actions/settings';
 import { dummyKeyDown } from '../../utils/utils';
 
-interface ResetButtonProps {
-  setResetFlag: Dispatch<SetStateAction<boolean>>;
-}
+function ResetButton() {
+  const dispatch = useDispatch();
 
-function ResetButton({ setResetFlag }: ResetButtonProps) {
   const handleClick = () => {
-    setResetFlag(true);
-    setTimeout(() => setResetFlag(false), 5);
+    dispatch(toggleResetFlag(true));
+    setTimeout(() => dispatch(toggleResetFlag(false)), 5);
   };
 
   return (

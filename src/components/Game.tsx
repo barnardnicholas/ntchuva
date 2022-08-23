@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import { maxMoveLength } from '../constants/board';
+import { RootState } from '../redux/store';
 import { BoardColumn, BoardSquare, PathSquare, PlayerIndex } from '../types/board';
 import {
   buildBoardSquares,
@@ -297,4 +299,9 @@ class Game extends Component<{
   }
 }
 
-export default Game;
+const mapStateToProps = ({ settingsReducer: { autoMove, resetFlag } }: RootState) => ({
+  autoMove,
+  resetFlag,
+});
+
+export default connect(mapStateToProps)(Game);
