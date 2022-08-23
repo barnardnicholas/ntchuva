@@ -50,6 +50,7 @@ const initialState: GameState = {
 
 class Game extends Component<{
   resetFlag: boolean;
+  autoMove: boolean;
 }> {
   /* eslint-disable */
   state: GameState;
@@ -58,6 +59,7 @@ class Game extends Component<{
   constructor(
     props: Readonly<{
       resetFlag: boolean;
+      autoMove: boolean;
     }>,
   ) {
     super(props);
@@ -80,7 +82,7 @@ class Game extends Component<{
     },
     prevState: GameState,
   ) {
-    const { resetFlag } = this.props;
+    const { resetFlag, autoMove } = this.props;
     const { activePlayer, moveInProgress, board0, board1 } = this.state;
     if (prevState.moveInProgress && !moveInProgress) {
       console.log('END OF TURN');
@@ -102,9 +104,11 @@ class Game extends Component<{
 
       if (Object.keys(newState).length) this.setState(newState); // Only update state if there are any differences
 
-      const board = [board0, board1][activePlayer];
-      const autoMovePathSquare = getAutoMovePathSquare(board);
-      if (autoMovePathSquare !== -1) this.handleMove(autoMovePathSquare); // If auto move is possible and enabled, do it
+      if (autoMove) {
+        const board = [board0, board1][activePlayer];
+        const autoMovePathSquare = getAutoMovePathSquare(board);
+        if (autoMovePathSquare !== -1) this.handleMove(autoMovePathSquare); // If auto move is possible and enabled, do it
+      }
     }
 
     if (resetFlag && !prevProps.resetFlag) this.resetGameState();

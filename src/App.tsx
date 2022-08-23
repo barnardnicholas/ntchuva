@@ -9,12 +9,19 @@ function App() {
   const [showSettings, setShowSettings] = useState<boolean>(false);
   const [isDarkMode, setIsDarkMode] = useState<boolean>(true);
   const [resetFlag, setResetFlag] = useState<boolean>(false);
+  const [autoMove, setAutoMove] = useState<boolean>(false);
 
   return (
     <div className={`App ${isDarkMode ? '' : 'theme-light'}`}>
-      <Game resetFlag={resetFlag} />
+      <Game resetFlag={resetFlag} autoMove={autoMove} />
       <BackgroundBlocker showSettings={showSettings} handleClick={() => setShowSettings(false)} />
-      <Settings showSettings={showSettings} isDarkMode={isDarkMode} setIsDarkMode={setIsDarkMode} />
+      <Settings
+        showSettings={showSettings}
+        isDarkMode={isDarkMode}
+        setIsDarkMode={setIsDarkMode}
+        setAutoMove={setAutoMove}
+        autoMove={autoMove}
+      />
       <Header
         showSettings={showSettings}
         setShowSettings={setShowSettings}

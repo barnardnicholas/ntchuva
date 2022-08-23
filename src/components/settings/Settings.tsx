@@ -6,9 +6,17 @@ interface SettingsProps {
   showSettings: boolean;
   isDarkMode: boolean;
   setIsDarkMode: Dispatch<SetStateAction<boolean>>;
+  autoMove: boolean;
+  setAutoMove: Dispatch<SetStateAction<boolean>>;
 }
 
-function Settings({ showSettings, isDarkMode, setIsDarkMode }: SettingsProps) {
+function Settings({
+  showSettings,
+  isDarkMode,
+  setIsDarkMode,
+  autoMove,
+  setAutoMove,
+}: SettingsProps) {
   return (
     <div className={`settings-container ${showSettings ? 'expanded' : ''}`}>
       <div className="settings">
@@ -20,6 +28,15 @@ function Settings({ showSettings, isDarkMode, setIsDarkMode }: SettingsProps) {
           name="darkMode"
           onChange={(_: string, value) => {
             setIsDarkMode(value);
+          }}
+        />
+        <Divider />
+        <ToggleSwitch
+          label="Auto-move"
+          value={autoMove}
+          name="darkMode"
+          onChange={(_: string, value) => {
+            setAutoMove(value);
           }}
         />
         <Divider />
