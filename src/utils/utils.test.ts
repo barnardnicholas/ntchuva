@@ -2,6 +2,7 @@ import { boardIndexes } from '../constants/board';
 import { BoardSquare, PathSquare, PlayerIndex } from '../types/board';
 import {
   buildBoardSquares,
+  getAutoMovePathSquare,
   getColumnFromIndex,
   getColumnFromPathSquare,
   getIndexOfPathSquare,
@@ -278,5 +279,34 @@ describe('getRingNumbers', () => {
     expect(getRingNumbers(14)).toEqual([4, 10]);
     expect(getRingNumbers(15)).toEqual([5, 10]);
     expect(getRingNumbers(40)).toEqual([5, 35]);
+  });
+});
+
+// ------------------------------------------------------------------------
+
+describe('getAutoMovePathSquare', () => {
+  const board: BoardSquare[] = buildBoardSquares(0);
+  const boardWithSingleValue = board.map((square: BoardSquare, i: number) => ({
+    ...square,
+    value: i === 0 ? 1 : 0,
+  }));
+  const boardWithSingleValueAbove1 = board.map((square: BoardSquare, i: number) => {
+    let value = 0;
+    if (i > board.length / 2) value = 1;
+    if (i === 0) value = 2;
+    return {
+      ...square,
+      value,
+    };
+  });
+
+  test('returns false for normal board', () => {
+    expect(getAutoMovePathSquare(board)).toEqual(-1);
+  });
+  test('returns true for single square with score', () => {
+    expect(getAutoMovePathSquare(boardWithSingleValue)).toEqual(0);
+  });
+  test('returns true for single square with score above 1', () => {
+    expect(getAutoMovePathSquare(boardWithSingleValueAbove1)).toEqual(0);
   });
 });

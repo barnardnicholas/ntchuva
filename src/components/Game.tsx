@@ -3,18 +3,19 @@ import { maxMoveLength } from '../constants/board';
 import { BoardColumn, BoardSquare, PathSquare, PlayerIndex } from '../types/board';
 import {
   buildBoardSquares,
+  getAutoMovePathSquare,
   getIndexOfPathSquare,
   getNextPathSquare,
   isSquareInFrontRow,
 } from '../utils/utils';
 import BoardSquareComponent from './BoardSquare';
-import Button from './form/Button';
 import HandWidget from './HandWidget';
 import GameOverModal from './modals/GameOverModal';
 
 /* eslint-disable */
 let masterTimer: ReturnType<typeof setInterval> = setInterval(() => {}, 1);
 /* eslint-enable */
+
 interface GameState {
   board0: BoardSquare[]; // Player 0's squares
   board1: BoardSquare[]; // Player 1's squares
@@ -47,14 +48,20 @@ const initialState: GameState = {
   currentMoveLength: 0,
 };
 
-class Game<P> extends Component<P> {
+class Game extends Component<{
+  resetFlag: boolean;
+}> {
   /* eslint-disable */
   state: GameState;
   /* eslint-enable */
 
-  constructor(props: Readonly<P>) {
+  constructor(
+    props: Readonly<{
+      resetFlag: boolean;
+    }>,
+  ) {
     super(props);
-    this.state = { ...initialState };
+    this.state = initialState;
   }
 
   componentDidMount() {
@@ -67,8 +74,14 @@ class Game<P> extends Component<P> {
     this.setState(newState); // Update state
   }
 
-  componentDidUpdate(_: unknown, prevState: GameState) {
-    const { moveInProgress, board0, board1 } = this.state;
+  componentDidUpdate(
+    prevProps: {
+      resetFlag: boolean;
+    },
+    prevState: GameState,
+  ) {
+    const { resetFlag } = this.props;
+    const { activePlayer, moveInProgress, board0, board1 } = this.state;
     if (prevState.moveInProgress && !moveInProgress) {
       console.log('END OF TURN');
       clearInterval(masterTimer); // Clear out timer at the end of each turn
@@ -88,7 +101,13 @@ class Game<P> extends Component<P> {
         newState = { ...newState, showGameOverModal: true };
 
       if (Object.keys(newState).length) this.setState(newState); // Only update state if there are any differences
+
+      const board = [board0, board1][activePlayer];
+      const autoMovePathSquare = getAutoMovePathSquare(board);
+      if (autoMovePathSquare !== -1) this.handleMove(autoMovePathSquare); // If auto move is possible and enabled, do it
     }
+
+    if (resetFlag && !prevProps.resetFlag) this.resetGameState();
   }
 
   componentWillUnmount() {
@@ -257,7 +276,6 @@ class Game<P> extends Component<P> {
         <div style={{ height: '1rem' }} />
         <div className="button-container">
           <span>P1: {score0}</span>
-          <Button text="Reset" onClick={this.resetGameState} icon="undo" />
           <span>P2: {score1}</span>
         </div>
         {showGameOverModal && (

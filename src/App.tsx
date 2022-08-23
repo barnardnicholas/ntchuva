@@ -8,13 +8,18 @@ import BackgroundBlocker from './components/BackgroundBlocker';
 function App() {
   const [showSettings, setShowSettings] = useState<boolean>(false);
   const [isDarkMode, setIsDarkMode] = useState<boolean>(true);
+  const [resetFlag, setResetFlag] = useState<boolean>(false);
 
   return (
     <div className={`App ${isDarkMode ? '' : 'theme-light'}`}>
-      <Game />
+      <Game resetFlag={resetFlag} />
       <BackgroundBlocker showSettings={showSettings} handleClick={() => setShowSettings(false)} />
       <Settings showSettings={showSettings} isDarkMode={isDarkMode} setIsDarkMode={setIsDarkMode} />
-      <Header showSettings={showSettings} setShowSettings={setShowSettings} />
+      <Header
+        showSettings={showSettings}
+        setShowSettings={setShowSettings}
+        setResetFlag={setResetFlag}
+      />
     </div>
   );
 }

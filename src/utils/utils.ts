@@ -126,3 +126,25 @@ export function getRingNumbers(value: number): number[] {
   if (value > 14) return [5, value - 5];
   return ringNumbers[value - 1];
 }
+
+/**
+ * Get possible auto-move square from board
+ * @param board - players boardsquares
+ * @return pathsquare number of auto-move square or -1 if impossible
+ */
+export function getAutoMovePathSquare(board: BoardSquare[]): PathSquare | -1 {
+  const scores = board.map((curr: BoardSquare) => curr.value);
+
+  // every square but 1 is empty = true
+  const scoresWithValue = scores.filter((score: number) => score > 0);
+  const squareWithValue = board.find((square: BoardSquare) => square.value > 0);
+  if (scoresWithValue.length === 1 && !!squareWithValue) return squareWithValue.pathOrder;
+
+  // only one square has score of more than 1 = true
+  const scoresWithValueMoreThanOne = scores.filter((score: number) => score > 1);
+  const squareWithValueMoreThanOne = board.find((square: BoardSquare) => square.value > 1);
+  if (scoresWithValueMoreThanOne.length === 1 && !!squareWithValueMoreThanOne)
+    return squareWithValueMoreThanOne.pathOrder;
+
+  return -1;
+}
