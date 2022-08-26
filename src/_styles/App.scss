@@ -74,6 +74,10 @@ em,
   @include transitionColors();
 }
 
+p {
+  margin-bottom: 1rem;
+}
+
 .background-blocker {
   position: fixed;
   top: 0;

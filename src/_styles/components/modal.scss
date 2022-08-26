@@ -28,6 +28,14 @@
   margin: 1rem;
   min-width: 50vmin;
   position: relative;
+  max-width: 50rem;
+  overflow-y: auto;
+
+  @include screenSize(mdMobile) {
+    min-width: calc(100vw - 2rem);
+    max-width: calc(100vw - 2rem);
+    max-height: calc(100 * var(--vh) - 2rem);
+  }
 
   .close-modal-button {
     font-size: 1.5rem;

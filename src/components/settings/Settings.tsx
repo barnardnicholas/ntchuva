@@ -1,7 +1,8 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { toggleDarkMode } from '../../redux/actions/darkMode';
-import { toggleAutoMove, toggleShowAbout } from '../../redux/actions/settings';
+import { toggleShowAbout } from '../../redux/actions/modals';
+import { toggleAutoMove } from '../../redux/actions/settings';
 import { getDarkMode } from '../../redux/selectors/darkMode';
 import { getAutoMove, getShowSettings } from '../../redux/selectors/settings';
 import { dummyKeyDown } from '../../utils/utils';

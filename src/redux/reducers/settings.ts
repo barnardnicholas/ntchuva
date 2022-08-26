@@ -1,24 +1,17 @@
 import { createReducer, PayloadAction } from '@reduxjs/toolkit';
 
-import {
-  toggleSettings,
-  toggleAutoMove,
-  toggleResetFlag,
-  toggleShowAbout,
-} from '../actions/settings';
+import { toggleSettings, toggleAutoMove, toggleResetFlag } from '../actions/settings';
 
 const initialState = {
   showSettings: false,
   autoMove: false,
   resetFlag: false,
-  showAbout: false,
 };
 
 interface SettingsState {
   showSettings: boolean;
   autoMove: boolean;
   resetFlag: boolean;
-  showAbout: boolean;
 }
 
 /* eslint-disable */
@@ -35,15 +28,10 @@ function handleToggleResetFlag(state: SettingsState, action: PayloadAction<boole
   state.resetFlag = action.payload;
 }
 
-function handleToggleShowAbout(state: SettingsState, action: PayloadAction<boolean>) {
-  state.showAbout = action.payload;
-}
-
 /* eslint-enable */
 
 export default createReducer(initialState, {
   [toggleSettings.type]: handleToggleShowSettings,
   [toggleAutoMove.type]: handleToggleAutoMove,
   [toggleResetFlag.type]: handleToggleResetFlag,
-  [toggleShowAbout.type]: handleToggleShowAbout,
 });

@@ -14,7 +14,7 @@ const middleware = [thunk];
 const persistConfig = {
   key: 'root',
   storage,
-  blacklist: [], // Don't persist these reducers
+  blacklist: ['modalsReducer'], // Don't persist these reducers
 };
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

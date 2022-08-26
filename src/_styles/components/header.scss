@@ -17,5 +17,9 @@ header {
     &.semi-hidden {
       opacity: 0.25;
     }
+
+    h1 {
+      margin-bottom: 0;
+    }
   }
 }
