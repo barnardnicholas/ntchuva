@@ -12,6 +12,7 @@ import {
 } from '../utils/utils';
 import BoardSquareComponent from './BoardSquare';
 import HandWidget from './HandWidget';
+import ConfirmResetModal from './modals/ConfirmResetModal';
 import GameOverModal from './modals/GameOverModal';
 
 /* eslint-disable */
@@ -31,6 +32,7 @@ interface GameState {
   score0: number;
   score1: number;
   showGameOverModal: boolean;
+  showConfirmResetModal: boolean;
   currentMoveLength: number;
 }
 
@@ -47,6 +49,7 @@ const initialState: GameState = {
   score0: 32,
   score1: 32,
   showGameOverModal: false,
+  showConfirmResetModal: false,
   currentMoveLength: 0,
 };
 
@@ -113,7 +116,7 @@ class Game extends Component<{
       }
     }
 
-    if (resetFlag && !prevProps.resetFlag) this.resetGameState(); // Handle reset button
+    if (resetFlag && !prevProps.resetFlag) this.setState({ showConfirmResetModal: true }); // Handle reset button
   }
 
   componentWillUnmount() {
@@ -217,6 +220,10 @@ class Game extends Component<{
     this.setState({ showGameOverModal: false });
   };
 
+  handleCloseConfirmResetModal = () => {
+    this.setState({ showConfirmResetModal: false });
+  };
+
   render() {
     const {
       hand,
@@ -231,6 +238,7 @@ class Game extends Component<{
       score0,
       score1,
       showGameOverModal,
+      showConfirmResetModal,
     } = this.state;
     return (
       <main>
@@ -285,14 +293,18 @@ class Game extends Component<{
           <span>P2: {score1}</span>
         </div>
         {showGameOverModal && (
-          // eslint-disable
           <GameOverModal
             score0={score0}
             score1={score1}
             closeModal={this.handleCloseGameOverModal}
             resetGame={this.resetGameState}
           />
-          // eslint-enable
+        )}
+        {showConfirmResetModal && (
+          <ConfirmResetModal
+            closeModal={this.handleCloseConfirmResetModal}
+            resetGame={this.resetGameState}
+          />
         )}
       </main>
     );
