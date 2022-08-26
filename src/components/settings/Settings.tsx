@@ -75,6 +75,15 @@ function Settings() {
           Roadmap
         </div>
         <Divider />
+        <a
+          className="link-button"
+          href="https://github.com/barnardnicholas/ntchuva"
+          target="_blank"
+          rel="noreferrer"
+        >
+          Source code (Github)
+        </a>
+        <Divider />
         <div style={{ minHeight: '2rem' }} />
         <h3>Settings</h3>
         <Divider />
