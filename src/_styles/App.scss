@@ -150,3 +150,21 @@ p {
   width: 100%;
   height: auto;
 }
+
+ul {
+  li {
+    padding-left: 1.5rem;
+    position: relative;
+    margin-bottom: 1rem;
+
+    &:before {
+      content: '';
+      position: absolute;
+      width: 0.5rem;
+      height: 0.5rem;
+      background-color: var(--main-typography);
+      top: 0.4em;
+      left: 0.5rem;
+    }
+  }
+}
