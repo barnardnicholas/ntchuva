@@ -2,10 +2,10 @@ import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import usePrevious from '../../hooks/usePrevious';
 import { toggleDarkMode } from '../../redux/actions/darkMode';
-import { toggleShowAbout, toggleShowRules } from '../../redux/actions/modals';
+import { toggleShowAbout, toggleShowRoadmap, toggleShowRules } from '../../redux/actions/modals';
 import { toggleAutoMove, toggleSettings } from '../../redux/actions/settings';
 import { getDarkMode } from '../../redux/selectors/darkMode';
-import { getShowAbout, getShowRules } from '../../redux/selectors/modals';
+import { getShowAbout, getShowRoadmap, getShowRules } from '../../redux/selectors/modals';
 import { getAutoMove, getShowSettings } from '../../redux/selectors/settings';
 import { dummyKeyDown } from '../../utils/utils';
 import Divider from '../Divider';
@@ -18,12 +18,15 @@ function Settings() {
   const autoMove = useSelector(getAutoMove);
   const showAboutModal = useSelector(getShowAbout);
   const showRulesModal = useSelector(getShowRules);
-  const prevProps = usePrevious({ showAboutModal, showRulesModal });
+  const showRoadmapModal = useSelector(getShowRoadmap);
+
+  const prevProps = usePrevious({ showAboutModal, showRulesModal, showRoadmapModal });
 
   useEffect(() => {
     if (
       (showAboutModal && !prevProps.showAboutModal) ||
-      (showRulesModal && !prevProps.showRulesModal)
+      (showRulesModal && !prevProps.showRulesModal) ||
+      (showRoadmapModal && !prevProps.showRoadmapModal)
     ) {
       dispatch(toggleSettings(false));
     }
@@ -31,8 +34,10 @@ function Settings() {
     dispatch,
     showAboutModal,
     showRulesModal,
+    showRoadmapModal,
     prevProps.showAboutModal,
     prevProps.showRulesModal,
+    prevProps.showRoadmapModal,
   ]);
 
   return (
@@ -58,6 +63,16 @@ function Settings() {
           onKeyDown={dummyKeyDown}
         >
           Rules
+        </div>
+        <Divider />
+        <div
+          className="link-button"
+          role="button"
+          tabIndex={0}
+          onClick={() => dispatch(toggleShowRoadmap(true))}
+          onKeyDown={dummyKeyDown}
+        >
+          Roadmap
         </div>
         <Divider />
         <div style={{ minHeight: '2rem' }} />

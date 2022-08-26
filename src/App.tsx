@@ -10,22 +10,25 @@ import './_styles/App.scss';
 import BackgroundBlocker from './components/BackgroundBlocker';
 import { getDarkMode } from './redux/selectors/darkMode';
 import LoadingScreen from './components/LoadingScreen';
-import { getShowAbout, getShowRules } from './redux/selectors/modals';
+import { getShowAbout, getShowRoadmap, getShowRules } from './redux/selectors/modals';
 import AboutModal from './components/modals/AboutModal';
-import { toggleShowAbout, toggleShowRules } from './redux/actions/modals';
+import { toggleShowAbout, toggleShowRoadmap, toggleShowRules } from './redux/actions/modals';
 import RulesModal from './components/modals/RulesModal';
+import RoadmapModal from './components/modals/RoadmapModal';
 
 function App() {
   const dispatch = useDispatch();
   const darkMode = useSelector(getDarkMode);
   const showAboutModal = useSelector(getShowAbout);
   const showRulesModal = useSelector(getShowRules);
+  const showRoadmapModal = useSelector(getShowRoadmap);
 
   return (
     <div className={`App ${darkMode ? '' : 'theme-light'}`}>
       <Game />
       {showAboutModal && <AboutModal closeModal={() => dispatch(toggleShowAbout(false))} />}
       {showRulesModal && <RulesModal closeModal={() => dispatch(toggleShowRules(false))} />}
+      {showRoadmapModal && <RoadmapModal closeModal={() => dispatch(toggleShowRoadmap(false))} />}
       <BackgroundBlocker />
       <Settings />
       <Header />
