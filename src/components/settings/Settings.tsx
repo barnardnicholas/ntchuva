@@ -1,9 +1,10 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { toggleDarkMode } from '../../redux/actions/darkMode';
-import { toggleAutoMove } from '../../redux/actions/settings';
+import { toggleAutoMove, toggleShowAbout } from '../../redux/actions/settings';
 import { getDarkMode } from '../../redux/selectors/darkMode';
 import { getAutoMove, getShowSettings } from '../../redux/selectors/settings';
+import { dummyKeyDown } from '../../utils/utils';
 import Divider from '../Divider';
 import ToggleSwitch from '../form/ToggleSwitch';
 
@@ -33,6 +34,16 @@ function Settings() {
             dispatch(toggleAutoMove(value));
           }}
         />
+        <Divider />
+        <div
+          className="link-button"
+          role="button"
+          tabIndex={0}
+          onClick={() => dispatch(toggleShowAbout(true))}
+          onKeyDown={dummyKeyDown}
+        >
+          About Ntchuva
+        </div>
         <Divider />
       </div>
     </div>
