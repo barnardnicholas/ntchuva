@@ -1,6 +1,7 @@
 import React from 'react';
 import ModalBody from './ModalBody';
 import ModalOuter from './ModalOuter';
+import NtchuvaBoard from '../../assets/ntchuva-board.jpg';
 
 interface AboutModalProps {
   closeModal: () => void;
@@ -12,6 +13,12 @@ function AboutModal({ closeModal }: AboutModalProps) {
       <ModalBody title="About Ntchuva" closeModal={closeModal}>
         <div style={{ minHeight: '1rem' }} />
         <h3>What is Ntchuva?</h3>
+        <img
+          className="about-pic"
+          src={NtchuvaBoard}
+          alt="Hand-carved Ntxuva board from Mozambique"
+        />
+        <div style={{ minHeight: '1rem' }} />
         <p>
           In the summer of 2022, a buddy of mine returned from a trip to Mozambique excitedly
           talking about a hand-carved boardgame he&apos;d picked up and offered to teach it to me.
