@@ -38,23 +38,7 @@ function Settings() {
   return (
     <div className={`settings-container ${showSettings ? 'expanded' : ''}`}>
       <div className="settings">
-        <h3>Settings</h3>
-        <Divider />
-        <ToggleSwitch
-          label="Dark theme"
-          value={darkMode}
-          name="darkMode"
-          onChange={(_: string, value) => dispatch(toggleDarkMode(value))}
-        />
-        <Divider />
-        <ToggleSwitch
-          label="Auto-move"
-          value={autoMove}
-          name="darkMode"
-          onChange={(_: string, value) => {
-            dispatch(toggleAutoMove(value));
-          }}
-        />
+        <h3>Info</h3>
         <Divider />
         <div
           className="link-button"
@@ -75,6 +59,25 @@ function Settings() {
         >
           Rules
         </div>
+        <Divider />
+        <div style={{ minHeight: '2rem' }} />
+        <h3>Settings</h3>
+        <Divider />
+        <ToggleSwitch
+          label="Dark theme"
+          value={darkMode}
+          name="darkMode"
+          onChange={(_: string, value) => dispatch(toggleDarkMode(value))}
+        />
+        <Divider />
+        <ToggleSwitch
+          label="Auto-move"
+          value={autoMove}
+          name="darkMode"
+          onChange={(_: string, value) => {
+            dispatch(toggleAutoMove(value));
+          }}
+        />
         <Divider />
       </div>
     </div>
