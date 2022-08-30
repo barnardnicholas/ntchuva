@@ -18,26 +18,25 @@ function RulesModal({ closeModal }: RulesModalProps) {
           </li>
           <li>
             Initially, each Pit contains 2 Seeds. The object of the game is to capture all of your
-            opponents Seeds. Do this, and you win!
+            opponent&apos;s Seeds. Do this, and you win!
           </li>
           <li>
-            To move, select any Pit on your side of the board which contains at least 2 seeds. If
-            you don&apos;t have any squares with more than one Seed, choose any occupied square to
-            move.
+            To move, select any Pit on your side of the board which contains at least 2 Seeds. If
+            you don&apos;t have any squares with at least 2 Seeds, select any Pit which isn&apos;t
+            empty.
           </li>
           <li>
-            Remove all the Seeds from the selected pit and &apos;sow&apos; them, one at a time, into
+            Remove all the Seeds from the selected Pit and &apos;sow&apos; them, one at a time, into
             the subsequent Pits, in a clockwise direction.
           </li>
           <li>
             If the last Seed in your hand lands in a Pit which already contains Seeds, move again
-            from that Pit.
+            from that Pit. If your last Seed lands in an empty Pit, your turn is over.
           </li>
-          <li>If your last Seed lands in an empty Pit, your turn is over.</li>
           <li>
-            If your turn ends in a Pit in the front row (ie closest to your opponents Pits), capture
-            any Seeds of theirs which are in the same column (adjacent Pits in front row and back
-            row) and discard them.
+            If your turn ends in a Pit in the front row (ie closest to your opponent&apos;s Pits),
+            capture any Seeds of theirs which are in the same column (adjacent Pits in front row and
+            back row) and discard them.
           </li>
         </ul>
         <p>

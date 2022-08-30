@@ -82,6 +82,27 @@ strong {
   font-weight: 500;
 }
 
+ul {
+  margin-bottom: 1rem;
+  text-align: left;
+
+  li {
+    padding-left: 1.5rem;
+    position: relative;
+    margin-bottom: 1rem;
+
+    &:before {
+      content: '';
+      position: absolute;
+      width: 0.5rem;
+      height: 0.5rem;
+      background-color: var(--main-typography);
+      top: 0.35em;
+      left: 0.5rem;
+    }
+  }
+}
+
 .background-blocker {
   position: fixed;
   top: 0;
@@ -153,24 +174,4 @@ strong {
   max-width: 100%;
   width: 100%;
   height: auto;
-}
-
-ul {
-  margin-bottom: 1rem;
-
-  li {
-    padding-left: 1.5rem;
-    position: relative;
-    margin-bottom: 1rem;
-
-    &:before {
-      content: '';
-      position: absolute;
-      width: 0.5rem;
-      height: 0.5rem;
-      background-color: var(--main-typography);
-      top: 0.35em;
-      left: 0.5rem;
-    }
-  }
 }

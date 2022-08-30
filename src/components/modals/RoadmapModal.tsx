@@ -20,21 +20,27 @@ function RoadmapModal({ closeModal }: RoadmapModalProps) {
           </li>
           <li>
             <strong>Computer opponent</strong> - I&apos;m making notes for how to add PvE play using
-            a computer-controlled opponent.
+            a computer-controlled opponent. I have no idea how good or bad the computer player will
+            be, but it will be fun to try and make it happen.
           </li>
           <li>
-            <strong>Mobile app!</strong> This web game was created in React, but I also make React
+            <strong>Mobile app</strong> - This web game was created in React, but I also make React
             Native apps, so this is a definite possibility for the future.
           </li>
           <li>
             <strong>Better Seed animations</strong> - The current implementation uses React Spring
             as a quick-and-dirty way to make the Seeds look like they&apos;re rolling around in a
-            bowl-shaped Pit. I&apos;m looking into ways to animte them better.
+            bowl-shaped Pit. I&apos;m looking into ways to animate them better.
           </li>
           <li>
-            <strong>Cheat Mode</strong> - I&apos;ve been planning a feature which would let you
+            <strong>Cheat mode</strong> - I&apos;ve been planning a feature which would let you
             preview moves as you hover over Pits. I&apos;m not sure what this will look like
             exactly, but we&apos;ll see.
+          </li>
+          <li>
+            <strong>Themes &amp; Skins</strong> - It might be nice for players to change the look of
+            the game beyond simple light/dark mode. As time goes on I will look into the possibility
+            of adding skins for the game, so it can look nicer than the monochrome version of today!
           </li>
         </ul>
       </ModalBody>

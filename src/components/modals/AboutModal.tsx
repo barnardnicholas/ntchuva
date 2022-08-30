@@ -39,8 +39,8 @@ function AboutModal({ closeModal }: AboutModalProps) {
         <p>
           Bao is a member of a class of capture games called &quot;Mancala&quot;, one of the oldest
           forms of board games. Although nobody knows exactly how old Mancala games are, possible
-          versions have been found in a 7th-century settlement in Ethiopia and 2nd-3rd century Roman
-          bath house in Isreal. The game may even have been played in Ancient Egypt!
+          versions have been found in a 7th-century settlement in Ethiopia and a 2nd-3rd century
+          Roman bath house in Isreal. The game may even have been played in Ancient Egypt!
         </p>
         <p>
           I hope you enjoy playing Ntchuva as much as I do, and I hope this simple version does some
