@@ -5,22 +5,22 @@ import { configureStore } from '@reduxjs/toolkit';
 import thunk from 'redux-thunk';
 // import { createStore, applyMiddleware } from 'redux';
 // import { composeWithDevTools } from 'redux-devtools-extension/developmentOnly';
-import { persistStore, persistReducer } from 'redux-persist';
-import storage from 'redux-persist/lib/storage'; // defaults to localStorage for web
+// import { persistStore, persistReducer } from 'redux-persist';
+// import storage from 'redux-persist/lib/storage'; // defaults to localStorage for web
 import rootReducer from './reducers';
 
 const middleware = [thunk];
 
-const persistConfig = {
-  key: 'root',
-  storage,
-  blacklist: ['modalsReducer'], // Don't persist these reducers
-};
+// const persistConfig = {
+//   key: 'root',
+//   storage,
+//   blacklist: ['modalsReducer'], // Don't persist these reducers
+// };
 
-const persistedReducer = persistReducer(persistConfig, rootReducer);
+// const persistedReducer = persistReducer(persistConfig, rootReducer);
 
 // const store = createStore(reducer, composeWithDevTools(applyMiddleware(...middleware)));
-const store = configureStore({ reducer: persistedReducer, middleware });
+const store = configureStore({ reducer: rootReducer, middleware });
 
 export type RootState = ReturnType<typeof rootReducer>;
 
@@ -31,7 +31,7 @@ export const useAppDispatch = (): Dispatch<Action<any>> => useDispatch<AppDispat
 export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector;
 
 export default () => {
-  const persistor = persistStore(store);
-  return { store, persistor };
+  // const persistor = persistStore(store);
+  return { store };
 };
 // export default store;

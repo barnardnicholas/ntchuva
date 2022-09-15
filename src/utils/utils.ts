@@ -148,3 +148,113 @@ export function getAutoMovePathSquare(board: BoardSquare[]): PathSquare | -1 {
 
   return -1;
 }
+
+/**
+ * Helper for detecting objects (not arrays or null)
+ * @param obj - Obj to examine
+ * @return True if object, false if not object
+ */
+export function isObj(obj: Record<string, unknown>): boolean {
+  return typeof obj === 'object' && !Array.isArray(obj) && obj !== null;
+}
+
+/**
+ * Helper for detecting empty objects
+ * @param obj - Obj to examine
+ * @return True if empty, false if not empty
+ */
+export function isObjEmpty(obj: Record<string, unknown>): boolean {
+  const keys = Object.keys(obj);
+  for (let i = 0; i < keys.length; i += 1) {
+    if (Object.prototype.hasOwnProperty.call(obj, keys[i])) return false;
+  }
+  return true;
+}
+
+/**
+ * General helper for measuring emptiness of variables - can mean empty or falsy, depending on type
+ * @param {any} item - variable to examine
+ * @return {boolean} True
+ */
+export function isEmpty(item: unknown): boolean {
+  if (Array.isArray(item)) return !item.length;
+  if (typeof item === 'string') return !item.trim().length;
+  if (item instanceof Date) return Number.isNaN(item.valueOf());
+  if (typeof item === 'object') return isObjEmpty(item as Record<string, unknown>);
+  if (typeof item === 'number') return false;
+
+  return !item;
+}
+
+/**
+ * General helper to compre two arrays to a set depth of nesting
+ * @param arr1 - first array to compare
+ * @param arr2 - second array to compare
+ * @param [depth] - level of nesting (optional)
+ * @return True if equal, false if not equal
+ */
+export function areArraysEqual(arr1: unknown[], arr2: unknown[], depth?: number) {
+  if (arr1.length !== arr2.length) return false;
+  let intDepth = 1;
+  /* eslint-disable */
+  if (!!depth) intDepth = depth;
+  const check = (arr1: unknown[], arr2: unknown[], depth: number): boolean => {
+    /* eslint-enable */
+    return arr1.reduce((acc: boolean, curr: unknown, index: number) => {
+      if (typeof arr2[index] !== typeof curr) return false;
+      if (depth <= 1 && arr2[index] !== curr) return false;
+      if (depth > 1 && Array.isArray(arr2[index]) && Array.isArray(curr)) {
+        return check(arr2[index] as unknown[], curr as unknown[], depth - 1);
+      }
+      return acc;
+    }, true);
+  };
+
+  return check(arr1, arr2, intDepth);
+}
+
+/**
+ * General helper to compre two objects to a set depth of nesting
+ * @param obj1 - first array to compare
+ * @param obj2 - second array to compare
+ * @param [depth] - level of nesting (optional)
+ * @return True if equal, false if not equal
+ */
+export function areObjectsEqual(
+  obj1: Record<string | number | symbol, unknown>,
+  obj2: Record<string | number | symbol, unknown>,
+  depth?: number,
+) {
+  if (Object.keys(obj1).length !== Object.keys(obj2).length) return false;
+  if (!areArraysEqual(Object.keys(obj1), Object.keys(obj2))) return false;
+
+  let intDepth = 1;
+  /* eslint-disable */
+  if (!!depth) intDepth = depth;
+
+  const check = (
+    obj1: Record<string | number | symbol, unknown>,
+    obj2: Record<string | number | symbol, unknown>,
+    depth: number,
+  ): boolean => {
+    /* eslint-enable */
+    return Object.keys(obj1).reduce((acc: boolean, curr: string) => {
+      if (typeof obj2[curr] !== typeof obj1[curr]) return false;
+      if (depth <= 1 && obj2[curr] !== obj1[curr]) return false;
+      if (
+        depth > 1 &&
+        isObj(obj2[curr] as Record<string | number | symbol, unknown>) &&
+        isObj(obj1[curr] as Record<string | number | symbol, unknown>)
+      ) {
+        return check(
+          obj2[curr] as Record<string | number | symbol, unknown>,
+          obj1[curr] as Record<string | number | symbol, unknown>,
+          depth - 1,
+        );
+      }
+      return acc;
+    }, true);
+  };
+
+  return check(obj1, obj2, intDepth);
+}

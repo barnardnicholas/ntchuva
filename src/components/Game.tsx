@@ -1,95 +1,127 @@
+import { doc, getDoc, getFirestore, onSnapshot, setDoc } from 'firebase/firestore';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { useParams } from 'react-router-dom';
 import { maxMoveLength } from '../constants/board';
+import initialGameState from '../constants/game';
 import { RootState } from '../redux/store';
-import { BoardColumn, BoardSquare, PathSquare, PlayerIndex } from '../types/board';
+import { BoardColumn, BoardSquare, GameState, PathSquare, PlayerIndex } from '../types/board';
 import {
-  buildBoardSquares,
   getAutoMovePathSquare,
   getIndexOfPathSquare,
   getNextPathSquare,
   isSquareInFrontRow,
 } from '../utils/utils';
 import BoardSquareComponent from './BoardSquare';
+import Button from './form/Button';
 import HandWidget from './HandWidget';
 import ConfirmResetModal from './modals/ConfirmResetModal';
 import GameOverModal from './modals/GameOverModal';
+import app from '../firebase/config';
 
 /* eslint-disable */
 let masterTimer: ReturnType<typeof setInterval> = setInterval(() => {}, 1);
 /* eslint-enable */
 
-interface GameState {
-  board0: BoardSquare[]; // Player 0's squares
-  board1: BoardSquare[]; // Player 1's squares
-  activeSquare0: PathSquare | -1; // Player 1
-  activeSquare1: PathSquare | -1; // Player 2
-  hand: number; // Number of counters in hand
-  activePlayer: PlayerIndex; // Player whose move it is
-  moveInProgress: boolean; // Is a move happening right now?
-  isBoard0EndGame: boolean;
-  isBoard1EndGame: boolean;
-  score0: number;
-  score1: number;
-  showGameOverModal: boolean;
-  showConfirmResetModal: boolean;
-  currentMoveLength: number;
-}
+const firestore = getFirestore(app);
 
-const initialState: GameState = {
-  board0: buildBoardSquares(0),
-  board1: buildBoardSquares(1),
-  activeSquare0: -1,
-  activeSquare1: -1,
-  hand: 0,
-  activePlayer: 0,
-  moveInProgress: false,
-  isBoard0EndGame: false,
-  isBoard1EndGame: false,
-  score0: 32,
-  score1: 32,
-  showGameOverModal: false,
-  showConfirmResetModal: false,
-  currentMoveLength: 0,
-};
+interface GameClassState {
+  game: GameState;
+  isFetching: boolean;
+  fetchError: string | null;
+  isPosting: boolean;
+  postError: string | null;
+}
 
 class Game extends Component<{
   resetFlag: boolean;
   autoMove: boolean;
+  params: { uid?: string; player?: string };
 }> {
   /* eslint-disable */
-  state: GameState;
+  state: GameClassState;
+  unsubscribe: ReturnType<typeof onSnapshot>;
   /* eslint-enable */
 
   constructor(
     props: Readonly<{
       resetFlag: boolean;
       autoMove: boolean;
+      params: { uid?: string; player?: string };
     }>,
   ) {
     super(props);
-    this.state = initialState;
+    this.state = {
+      game: initialGameState,
+      isFetching: true,
+      fetchError: null,
+      isPosting: false,
+      postError: null,
+    };
+    /* eslint-disable */
+    this.unsubscribe = () => {};
+    /* eslint-enable */
   }
 
   componentDidMount() {
-    const { board0, board1 } = this.state;
+    const { params } = this.props;
+    const { game } = this.state;
+    const { board0, board1, moveInProgress } = game;
     clearInterval(masterTimer); // Clear out timer on mount
-    const newState = {
+    const newGameState: Partial<GameState> = {
       score0: board0.reduce((acc: number, curr: BoardSquare) => acc + curr.value, 0),
       score1: board1.reduce((acc: number, curr: BoardSquare) => acc + curr.value, 0),
     }; // Initialise scores
-    this.setState(newState); // Update state
+    this.setGameStateWithTimestamp(newGameState); // Update state
+    if (params.uid) {
+      const docRef = doc(firestore, 'games', params.uid || '');
+      this.unsubscribe = onSnapshot(
+        docRef,
+        snapshot => {
+          console.log('onSnapshot');
+          if (snapshot.exists() && !moveInProgress) {
+            const lastUpdated: number = new Date().valueOf();
+            this.setState({
+              isFetching: false,
+              fetchError: null,
+              game: { ...snapshot.data(), lastUpdated },
+            });
+          }
+        },
+        error => {
+          console.error(`Failed to fetch snapshot for uid ${params.uid}`, error);
+          this.setState({ isFetching: false, fetchError: error.message });
+        },
+      );
+    }
   }
 
   componentDidUpdate(
     prevProps: {
       resetFlag: boolean;
+      params: { uid?: string; player?: string };
     },
-    prevState: GameState,
+    prevState: GameClassState,
   ) {
     const { resetFlag, autoMove } = this.props;
-    const { activePlayer, moveInProgress, board0, board1 } = this.state;
-    if (prevState.moveInProgress && !moveInProgress) {
+    const { game } = this.state;
+    const { game: prevGame } = prevState;
+    const { activePlayer, moveInProgress, board0, board1, activeSquare0, activeSquare1 } = game;
+    const prevActiveSquare = [prevGame.activeSquare0, prevGame.activeSquare1][
+      prevGame.activePlayer
+    ];
+    const activeSquare = [activeSquare0, activeSquare1][activePlayer];
+
+    if (
+      !prevGame.moveInProgress &&
+      moveInProgress &&
+      prevActiveSquare !== activeSquare &&
+      activeSquare !== -1
+    ) {
+      this.handleMove(activeSquare, true);
+    }
+
+    if (prevGame.moveInProgress && !moveInProgress) {
       console.log('END OF TURN');
       clearInterval(masterTimer); // Clear out timer at the end of each turn
 
@@ -98,16 +130,14 @@ class Game extends Component<{
       const isBoard1EndGame = board1.every((square: BoardSquare) => square.value < 2);
       const score0 = board0.reduce((acc: number, curr: BoardSquare) => acc + curr.value, 0);
       const score1 = board1.reduce((acc: number, curr: BoardSquare) => acc + curr.value, 0);
-      if (prevState.isBoard0EndGame !== isBoard0EndGame)
-        newState = { ...newState, isBoard0EndGame };
-      if (prevState.isBoard1EndGame !== isBoard1EndGame)
-        newState = { ...newState, isBoard1EndGame };
-      if (prevState.score0 !== score0) newState = { ...newState, score0 };
-      if (prevState.score1 !== score1) newState = { ...newState, score1 };
-      if ((prevState.score0 > 0 && score0 <= 0) || (prevState.score1 > 0 && score1 <= 0))
+      if (prevGame.isBoard0EndGame !== isBoard0EndGame) newState = { ...newState, isBoard0EndGame };
+      if (prevGame.isBoard1EndGame !== isBoard1EndGame) newState = { ...newState, isBoard1EndGame };
+      if (prevGame.score0 !== score0) newState = { ...newState, score0 };
+      if (prevGame.score1 !== score1) newState = { ...newState, score1 };
+      if ((prevGame.score0 > 0 && score0 <= 0) || (prevGame.score1 > 0 && score1 <= 0))
         newState = { ...newState, showGameOverModal: true };
 
-      if (Object.keys(newState).length) this.setState(newState); // Only update state if there are any differences
+      if (Object.keys(newState).length) this.setGameStateWithTimestamp(newState); // Only update state if there are any differences
 
       if (autoMove) {
         const board = [board0, board1][activePlayer];
@@ -116,20 +146,70 @@ class Game extends Component<{
       }
     }
 
-    if (resetFlag && !prevProps.resetFlag) this.setState({ showConfirmResetModal: true }); // Handle reset button
+    if (resetFlag && !prevProps.resetFlag)
+      this.setGameStateWithTimestamp({ showConfirmResetModal: true }); // Handle reset button
   }
 
   componentWillUnmount() {
     clearInterval(masterTimer); // Clear out timer on unmount
+    this.unsubscribe();
   }
+
+  setGameStateWithTimestamp = (newGameState: Partial<GameState>, cb?: () => void) => {
+    const lastUpdated: number = new Date().valueOf();
+    this.setState((prevState: GameClassState) => {
+      const { game } = prevState;
+      return {
+        ...prevState,
+        game: { ...game, ...newGameState, lastUpdated },
+      };
+    }, cb);
+  };
 
   resetGameState = () => {
     clearInterval(masterTimer);
-    this.setState(initialState);
+    this.setGameStateWithTimestamp(initialGameState);
+  };
+
+  syncToServer = async (gameState?: GameState) => {
+    console.log('Syncing to server');
+    const { game } = this.state;
+    const { params } = this.props;
+    if (!params.uid) {
+      console.log('No ID provided');
+      return;
+    }
+    this.setState({ isPosting: true, postError: null });
+    try {
+      await setDoc(doc(firestore, 'games', params.uid), gameState || game);
+      this.setState({ isPosting: false });
+    } catch (e) {
+      this.setState({ isPosting: false, postError: 'Error syncing to server' });
+      console.error(e);
+    }
+  };
+
+  syncFromServer = async () => {
+    console.log('Syncing from server');
+    const { params } = this.props;
+    if (!params.uid) {
+      console.log('No ID provided');
+      return;
+    }
+    this.setState({ isFetching: true, fetchError: null });
+    try {
+      const docRef = doc(firestore, 'games', params.uid);
+      const docSnap = await getDoc(docRef);
+      this.setState({ isFetching: false, game: docSnap.data() });
+    } catch (e) {
+      this.setState({ isFetching: false, fetchError: 'Error syncing from server' });
+      console.error(e);
+    }
   };
 
   handleMove = (pathSquare: PathSquare, isInitialEvent?: boolean): void => {
-    const { board0, board1, activePlayer } = this.state;
+    const { game } = this.state;
+    const { board0, board1, activePlayer } = game;
     clearInterval(masterTimer);
     const board = [...[board0, board1][activePlayer]];
 
@@ -139,32 +219,47 @@ class Game extends Component<{
 
     // Assemble new State
     const newState = {
-      moveInProgress: true,
-      buttonDisabled: true,
       [`board${activePlayer}`]: board,
-      [`activeSquare${activePlayer}`]: pathSquare,
       hand: newSquare.value,
     };
     if (isInitialEvent) newState.currentMoveLength = 0;
-    this.setState(newState);
+    this.setGameStateWithTimestamp(newState);
     masterTimer = setInterval(this.tick, 333);
+  };
+
+  handleChooseSquare = (pathSquare: PathSquare) => {
+    const { game } = this.state;
+    const { activePlayer } = game;
+
+    const newState = {
+      moveInProgress: true,
+      buttonDisabled: true,
+      [`activeSquare${activePlayer}`]: pathSquare,
+    };
+    // this.setState((prevState: GameClassState) => {
+    //   return { ...prevState, game: { ...game, ...newState } };
+    // });
+    this.syncToServer({ ...game, ...newState });
   };
 
   killColumn = (column: BoardColumn, player: PlayerIndex): void => {
     // Capture pieces based on players final square
-    const { board0, board1 } = this.state;
+    const { game } = this.state;
+    const { board0, board1 } = game;
     const board = [...[board0, board1][player]].map((square: BoardSquare) => {
       if (square.column === column) return { ...square, value: 0 };
       return square;
     });
-    this.setState({
-      [`board${player}`]: board,
-    });
+    // this.setGameStateWithTimestamp({
+    //   [`board${player}`]: board,
+    // });
+    this.syncToServer({ ...game, [`board${player}`]: board });
   };
 
   tick = () => {
+    const { game } = this.state;
     const { hand, board0, board1, activePlayer, activeSquare0, activeSquare1, currentMoveLength } =
-      this.state;
+      game;
 
     const board = [...[board0, board1][activePlayer]]; // Select correct board based on activePlayer and make a copy for private use
     const activeSquare: PathSquare = [activeSquare0, activeSquare1][activePlayer] as PathSquare; // Select correct activeSquare based on activePlayer
@@ -189,7 +284,7 @@ class Game extends Component<{
         newState[`board${activePlayer}`] = board;
       } // Mutate state if necessary
 
-      this.setState(newState); // Update state
+      this.setGameStateWithTimestamp(newState); // Update state
     } else if (
       hand <= 0 &&
       board[getIndexOfPathSquare(activeSquare, board)].value > 1 &&
@@ -204,7 +299,20 @@ class Game extends Component<{
         this.killColumn(newSquare.column, activePlayer === 0 ? 1 : 0);
       }
 
-      this.setState({
+      // this.setGameStateWithTimestamp(
+      //   {
+      //     activeSquare0: -1,
+      //     activeSquare1: -1,
+      //     activePlayer: !activePlayer ? 1 : 0,
+      //     moveInProgress: false,
+      //     score0: board0.reduce((acc: number, curr: BoardSquare) => acc + curr.value, 0),
+      //     score1: board1.reduce((acc: number, curr: BoardSquare) => acc + curr.value, 0),
+      //     currentMoveLength: 0,
+      //     lastUpdated: new Date().valueOf()
+      //   }
+      // ); // Update state and end turn
+      this.syncToServer({
+        ...game,
         activeSquare0: -1,
         activeSquare1: -1,
         activePlayer: !activePlayer ? 1 : 0,
@@ -212,19 +320,21 @@ class Game extends Component<{
         score0: board0.reduce((acc: number, curr: BoardSquare) => acc + curr.value, 0),
         score1: board1.reduce((acc: number, curr: BoardSquare) => acc + curr.value, 0),
         currentMoveLength: 0,
-      }); // Update state and end turn
+        lastUpdated: new Date().valueOf(),
+      });
     }
   };
 
   handleCloseGameOverModal = () => {
-    this.setState({ showGameOverModal: false });
+    this.setGameStateWithTimestamp({ showGameOverModal: false });
   };
 
   handleCloseConfirmResetModal = () => {
-    this.setState({ showConfirmResetModal: false });
+    this.setGameStateWithTimestamp({ showConfirmResetModal: false });
   };
 
   render() {
+    const { game } = this.state;
     const {
       hand,
       board0,
@@ -239,9 +349,13 @@ class Game extends Component<{
       score1,
       showGameOverModal,
       showConfirmResetModal,
-    } = this.state;
+    } = game;
+    const { params } = this.props;
+    const { uid, player } = params;
     return (
       <main>
+        <div>Current Game ID: {uid || ''}</div>
+        <div>Enforced Player: {player || ''}</div>
         <div>
           {score0 <= 0 || score1 <= 0
             ? `Player ${score0 <= 0 ? '2' : '1'} wins!`
@@ -255,7 +369,7 @@ class Game extends Component<{
                 key={`${square.i}-${square.player}`}
                 square={square}
                 isActive={activeSquare1 === square.pathOrder && activePlayer === square.player}
-                handleMove={this.handleMove}
+                handleMove={this.handleChooseSquare}
                 disabled={activePlayer !== 1 || (square.value < 2 && !isBoard1EndGame)}
                 moveInProgress={moveInProgress}
               />
@@ -274,7 +388,7 @@ class Game extends Component<{
                 key={`${square.i}-${square.player}`}
                 square={square}
                 isActive={activeSquare0 === square.pathOrder && activePlayer === square.player}
-                handleMove={this.handleMove}
+                handleMove={this.handleChooseSquare}
                 disabled={activePlayer !== 0 || (square.value < 2 && !isBoard0EndGame)}
                 moveInProgress={moveInProgress}
               />
@@ -292,6 +406,8 @@ class Game extends Component<{
           <span>P1: {score0}</span>
           <span>P2: {score1}</span>
         </div>
+        <Button text="Sync To Server" onClick={() => this.syncToServer()} />
+        <Button text="Sync From Server" onClick={() => this.syncFromServer()} />
         {showGameOverModal && (
           <GameOverModal
             score0={score0}
@@ -311,9 +427,19 @@ class Game extends Component<{
   }
 }
 
+interface GameContainerProps {
+  autoMove: boolean;
+  resetFlag: boolean;
+}
+
+function GameContainer({ resetFlag, autoMove }: GameContainerProps) {
+  const params = useParams();
+  return <Game autoMove={autoMove} resetFlag={resetFlag} params={params} />;
+}
+
 const mapStateToProps = ({ settingsReducer: { autoMove, resetFlag } }: RootState) => ({
   autoMove,
   resetFlag,
 });
 
-export default connect(mapStateToProps)(Game);
+export default connect(mapStateToProps)(GameContainer);

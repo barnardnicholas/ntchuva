@@ -8,3 +8,21 @@ export interface BoardSquare {
   value: number;
   column: BoardColumn;
 }
+
+export interface GameState {
+  board0: BoardSquare[]; // Player 0's squares
+  board1: BoardSquare[]; // Player 1's squares
+  activeSquare0: PathSquare | -1; // Player 1
+  activeSquare1: PathSquare | -1; // Player 2
+  hand: number; // Number of counters in hand
+  activePlayer: PlayerIndex; // Player whose move it is
+  moveInProgress: boolean; // Is a move happening right now?
+  isBoard0EndGame: boolean;
+  isBoard1EndGame: boolean;
+  score0: number;
+  score1: number;
+  showGameOverModal: boolean;
+  showConfirmResetModal: boolean;
+  currentMoveLength: number;
+  lastUpdated: number;
+}

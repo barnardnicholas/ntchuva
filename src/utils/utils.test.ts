@@ -1,6 +1,8 @@
 import { boardIndexes } from '../constants/board';
 import { BoardSquare, PathSquare, PlayerIndex } from '../types/board';
 import {
+  areArraysEqual,
+  areObjectsEqual,
   buildBoardSquares,
   getAutoMovePathSquare,
   getColumnFromIndex,
@@ -9,6 +11,8 @@ import {
   getNextPathSquare,
   getPathOrderFromIndex,
   getRingNumbers,
+  isEmpty,
+  isObjEmpty,
   isSquareInFrontRow,
   rotate,
 } from './utils';
@@ -308,5 +312,181 @@ describe('getAutoMovePathSquare', () => {
   });
   test('returns true for single square with score above 1', () => {
     expect(getAutoMovePathSquare(boardWithSingleValueAbove1)).toEqual(0);
+  });
+});
+
+// ------------------------------------------------------------------------
+
+describe('isObjEmpty', () => {
+  const emptyObj = {};
+  const singleKeyObj = { testKey: 'testValue' };
+  const multiKeyObj = { testKey: 'testValue', anotherKey: 'anotherValue' };
+
+  test('Returns a boolean', () => {
+    expect([true, false]).toContain(isObjEmpty(emptyObj));
+    expect([true, false]).toContain(isObjEmpty(singleKeyObj));
+    expect([true, false]).toContain(isObjEmpty(multiKeyObj));
+  });
+
+  test('Returns true for an empty object', () => {
+    expect(isObjEmpty(emptyObj)).toBeTruthy();
+    expect(isObjEmpty(emptyObj)).toBe(true);
+  });
+
+  test('Returns false for an non-empty object', () => {
+    expect(isObjEmpty(singleKeyObj)).toBeFalsy();
+    expect(isObjEmpty(singleKeyObj)).toBe(false);
+    expect(isObjEmpty(multiKeyObj)).toBeFalsy();
+    expect(isObjEmpty(multiKeyObj)).toBe(false);
+  });
+});
+
+// ------------------------------------------------------------------------
+
+describe('isEmpty', () => {
+  const emptyObj = {};
+  const singleKeyObj: Record<string, string> = { testKey: 'testValue' };
+  const multiKeyObj: Record<string, string> = { testKey: 'testValue', anotherKey: 'anotherValue' };
+  const emptyArray: unknown[] = [];
+  const numberArray: number[] = [1, 2, 3];
+  const stringArray: string[] = ['a', 'b', 'c'];
+  const emptyString: string = '';
+  const string: string = 'abc';
+  const validDate: Date = new Date();
+  const invalidDate: Date = new Date('nothing');
+
+  test('Returns a boolean', () => {
+    expect([true, false]).toContain(isEmpty(emptyObj));
+    expect([true, false]).toContain(isEmpty(multiKeyObj));
+  });
+
+  test('Returns true for empty object', () => {
+    expect(isEmpty(emptyObj)).toEqual(true);
+  });
+
+  test('Returns false for non-empty object', () => {
+    expect(isEmpty(singleKeyObj)).toEqual(false);
+    expect(isEmpty(multiKeyObj)).toEqual(false);
+  });
+
+  test('Returns true for empty array', () => {
+    expect(isEmpty(emptyArray)).toEqual(true);
+  });
+
+  test('Returns false for non-empty array', () => {
+    expect(isEmpty(stringArray)).toEqual(false);
+    expect(isEmpty(numberArray)).toEqual(false);
+  });
+
+  test('Returns true for an invalid Date', () => {
+    expect(isEmpty(invalidDate)).toEqual(true);
+  });
+
+  test('Returns false for valid Date', () => {
+    expect(isEmpty(validDate)).toEqual(false);
+  });
+
+  test('Returns true for an empty string', () => {
+    expect(isEmpty(emptyString)).toEqual(true);
+  });
+
+  test('Returns false for string', () => {
+    expect(isEmpty(string)).toEqual(false);
+  });
+
+  test('Returns false for any number', () => {
+    expect(isEmpty(0)).toEqual(false);
+    expect(isEmpty(10)).toEqual(false);
+    expect(isEmpty(-10)).toEqual(false);
+  });
+});
+
+// ------------------------------------------------------------------------
+
+describe('areArraysEqual', () => {
+  const nonNested1 = [1, 2, 3];
+  const nonNested2 = ['a', 'b', 'c'];
+  const nonNested3 = [1, 2, 3];
+  const nonNested4 = ['1', '2', '3'];
+
+  test('Returns true for 2 empty arrays', () => {
+    expect(areArraysEqual([], [])).toEqual(true);
+  });
+  test('Returns false for different Array lengths', () => {
+    expect(areArraysEqual([1, 2, 3], [1, 2])).toEqual(false);
+  });
+  test('Returns false for same Array lengths but different values', () => {
+    expect(areArraysEqual(nonNested1, nonNested2)).toEqual(false);
+  });
+  test('Returns true for equal, non-nested arrays', () => {
+    expect(areArraysEqual(nonNested1, nonNested3)).toEqual(true);
+  });
+  test('Returns false for equal, non-nested arrays with same values but different types', () => {
+    expect(areArraysEqual(nonNested1, nonNested4)).toEqual(false);
+  });
+  test('Returns true for equal, nested arrays', () => {
+    expect(
+      areArraysEqual([[...nonNested2], [...nonNested2]], [[...nonNested2], [...nonNested2]], 2),
+    ).toEqual(true);
+  });
+  test('Returns false for non-equal, nested arrays', () => {
+    expect(
+      areArraysEqual([[...nonNested2], [...nonNested2]], [[...nonNested1], [...nonNested1]], 2),
+    ).toEqual(false);
+  });
+  test('Returns false for non-equal, nested arrays with same values but different types (depth of 2)', () => {
+    expect(
+      areArraysEqual([[...nonNested1, nonNested4]], [[...nonNested1], [...nonNested1]], 2),
+    ).toEqual(false);
+  });
+  test('Returns true for equal, nested arrays (depth of 3)', () => {
+    expect(
+      areArraysEqual(
+        [
+          [[...nonNested1], [...nonNested1]],
+          [[...nonNested1], [...nonNested3]],
+        ],
+        [
+          [[...nonNested1], [...nonNested1]],
+          [[...nonNested1], [...nonNested3]],
+        ],
+        3,
+      ),
+    ).toEqual(true);
+  });
+});
+
+// ------------------------------------------------------------------------
+
+describe('areObjectsEqual', () => {
+  const nonNested1 = { key1: 'value1', key2: 'value2' };
+  const nonNested2 = { keyA: 1, keyB: 2 };
+
+  test('Returns true for 2 empty objects', () => {
+    expect(areObjectsEqual({}, {})).toEqual(true);
+  });
+  test('Returns true for 2 identical objects', () => {
+    expect(areObjectsEqual({ ...nonNested1 }, { ...nonNested1 })).toEqual(true);
+  });
+  test('Returns false for 2 different objects', () => {
+    expect(areObjectsEqual({ ...nonNested1 }, { ...nonNested2 })).toEqual(false);
+  });
+  test('Returns true for 2 different nested objects', () => {
+    expect(
+      areObjectsEqual(
+        { first: { ...nonNested1 }, second: { ...nonNested2 } },
+        { first: { ...nonNested1 }, second: { ...nonNested2 } },
+        2,
+      ),
+    ).toEqual(true);
+  });
+  test('Returns false for 2 different nested objects', () => {
+    expect(
+      areObjectsEqual(
+        { first: { ...nonNested1 }, second: { ...nonNested2 } },
+        { first: { ...nonNested1 }, second: { ...nonNested1 } },
+        2,
+      ),
+    ).toEqual(false);
   });
 });
